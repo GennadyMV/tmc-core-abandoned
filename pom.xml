@@ -27,6 +27,7 @@
 
   <dependencies>
   
+  		<!-- GSON -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -34,6 +35,7 @@
 			<scope>compile</scope>
 		</dependency>
 		
+		<!-- Commons IO -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -41,6 +43,7 @@
 			<type>jar</type>
 		</dependency>
 
+		<!-- JUnit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -48,18 +51,21 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- TMC JUnit runner -->
 		<dependency>
 			<groupId>fi.helsinki.cs.tmc</groupId>
 			<artifactId>tmc-junit-runner</artifactId>
 			<version>0.2.5</version>
 		</dependency>
 		
+		<!-- Snakeyaml -->
 		<dependency>
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 			<version>1.13</version>
 		</dependency>
 		
+		<!--  log4j  -->
 	    <dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
