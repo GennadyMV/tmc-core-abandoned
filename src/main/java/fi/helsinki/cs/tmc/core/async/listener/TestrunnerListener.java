@@ -9,15 +9,17 @@ import java.util.List;
 
 public class TestrunnerListener extends AbstractTaskListener {
 
+    private final UIInvoker uiInvoker;
+    
     public TestrunnerListener(final UIInvoker uiInvoker) {
         
-        super(uiInvoker);
+        this.uiInvoker = uiInvoker;
     }
 
     @Override
     public void onStart() { 
         
-        getUIInvoker().invokeTestsRunningWindow();
+        uiInvoker.invokeTestsRunningWindow();
     }
 
     @Override
@@ -25,10 +27,10 @@ public class TestrunnerListener extends AbstractTaskListener {
 
         final TestRunResult testRunResult = (TestRunResult) result.result();
 
-        getUIInvoker().invokeTestResultWindow(testRunResult.getTestCaseResults());
+        uiInvoker.invokeTestResultWindow(testRunResult.getTestCaseResults());
 
         if (allPassed(testRunResult.getTestCaseResults())) {
-            getUIInvoker().invokeSubmitToServerWindow();
+            uiInvoker.invokeSubmitToServerWindow();
         }
     }
 
@@ -43,7 +45,7 @@ public class TestrunnerListener extends AbstractTaskListener {
     @Override
     public void onEnd(final TaskResult<? extends Object> result) { 
         
-        getUIInvoker().closeTestsRunningWindow();
+        uiInvoker.closeTestsRunningWindow();
     }
     
     private boolean allPassed(final List<TestCaseResult> testCaseResults) {
@@ -56,5 +58,4 @@ public class TestrunnerListener extends AbstractTaskListener {
 
         return true;
     }
-
 }
