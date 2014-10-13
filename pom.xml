@@ -3,7 +3,7 @@
 	  <modelVersion>4.0.0</modelVersion>
 	
 	  <groupId>fi.helsinki.cs.tmc</groupId>
-	  <artifactId>core</artifactId>
+	  <artifactId>client-core</artifactId>
 	  <version>0.0.1-SNAPSHOT</version>
 	  <packaging>jar</packaging>
 	
