@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.core.domain;
 
-import fi.helsinki.cs.tmc.core.util.FileUtil;
+import fi.helsinki.cs.tmc.core.util.PathUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -101,9 +101,9 @@ public class Project {
             if (projectFiles.size() == 1) {
                 final File projectFile = new File(projectFiles.get(0));
                 if (projectFile.isDirectory()) {
-                    return FileUtil.getUnixPath(projectFile.getAbsolutePath());
+                    return PathUtil.getUnixPath(projectFile.getAbsolutePath());
                 } else {
-                    return FileUtil.getUnixPath(projectFile.getParent());
+                    return PathUtil.getUnixPath(projectFile.getParent());
                 }
             }
             String shortest = null;
@@ -120,7 +120,7 @@ public class Project {
             }
             if (shortest != null) {
                 final File rootPathFile = new File(shortest);
-                return FileUtil.getUnixPath(rootPathFile.getAbsolutePath());
+                return PathUtil.getUnixPath(rootPathFile.getAbsolutePath());
             }
         }
         return "";
