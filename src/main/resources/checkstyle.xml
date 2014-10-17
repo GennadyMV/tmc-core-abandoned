@@ -21,13 +21,10 @@
 	<module name='NewlineAtEndOfFile' />
 
 	<!-- Trailing whitespaces -->
-	<!-- TRANSITIONAL -->
-	<!-- 
 	<module name='RegexpSingleline'>
 		<property name='format' value='\s+$' />
 		<property name='message' value='Trailing whitespace.' />
 	</module>
-	-->
 
 	<module name='Translation' />
 

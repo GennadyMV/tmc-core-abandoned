@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * Wrapper class for file IO. Allows us to mock file interactions in unit tests.
  */
 public class FileIO {
-    
+
     private static final Logger LOG = Logger.getLogger(FileIO.class.getName());
 
     private final File file;
@@ -125,13 +125,13 @@ public class FileIO {
     public List<FileIO> getChildren() {
 
         final List<FileIO> children = new ArrayList<FileIO>();
-        
+
         if (directoryExists()) {
             for (final File f : file.listFiles()) {
                 children.add(new FileIO(f.getAbsolutePath()));
             }
         }
-        
+
         return children;
     }
 

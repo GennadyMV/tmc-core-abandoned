@@ -10,7 +10,7 @@ public class ExerciseKeyTest {
 
     private static final String COURSE = "course";
     private static final String EXERCISE = "exercise";
-    
+
     private ExerciseKey ek;
 
     @Before

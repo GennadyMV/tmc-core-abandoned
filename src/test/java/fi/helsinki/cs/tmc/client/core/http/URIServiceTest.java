@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class URIServiceTest {
-    
+
     private class SettingsStub implements Settings {
 
         @Override
@@ -58,48 +58,48 @@ public class URIServiceTest {
 
             return "username";
         }
-        
+
     }
-    
+
 
     private Settings settings;
 
     @Before
     public void setUp() {
-        
+
         settings = new SettingsStub();
     }
-    
+
     @Test
     public void canConstruct() {
-        
+
         new URIService();
     }
-    
+
     @Test
     public void returnsCorrectCourseListURI() throws URISyntaxException {
 
         final URI uri = URIService.courseListURI(settings);
-        
+
         assertCorrectHostPortAndScheme(uri);
         assertCorrectParams(uri);
-        
+
         System.out.println(uri.getPath());
         assertTrue(uri.getPath().equals("/hy/courses.json"));
     }
-    
+
     @Test
     public void returnsCorrectActiveCourseDetailsURI() throws URISyntaxException {
-        
+
         final URI uri = URIService.activeCourseDetailsURI(settings);
-        
+
         assertCorrectHostPortAndScheme(uri);
         assertCorrectParams(uri);
-        
+
         assertTrue(uri.getPath().equals("/hy/courses/1.json"));
-        
+
     }
-    
+
     private void assertCorrectParams(final URI uri) {
 
         assertTrue(uri.toString().contains("api_version=7"));
@@ -108,7 +108,7 @@ public class URIServiceTest {
     }
 
     private void assertCorrectHostPortAndScheme(final URI uri) {
-        
+
         assertEquals("localhost", uri.getHost());
         assertEquals(8089, uri.getPort());
         assertEquals("http", uri.getScheme());

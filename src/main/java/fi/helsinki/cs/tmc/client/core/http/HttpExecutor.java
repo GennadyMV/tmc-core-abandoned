@@ -12,20 +12,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class HttpExecutor {
-    
+
     private static final Logger LOG = LogManager.getLogger();
-    
+
     private CancellableHttpRequest httpRequest;
     private ObjectMapper mapper;
-    
+
     public HttpExecutor(final ObjectMapper mapper, final CancellableHttpRequest httpRequest) {
 
         this.mapper = mapper;
         this.httpRequest = httpRequest;
     }
-    
+
     public void withoutResponse() throws IOException {
-        
+
         try {
             httpRequest.execute();
         } catch (AuthenticationException | InterruptedException | ExecutionException exception) {
@@ -33,9 +33,9 @@ public class HttpExecutor {
             throw new IOException(exception);
         }
     }
-    
+
     public HttpResponseParser withResponse() throws IOException {
-        
+
         final BufferedHttpEntity response;
         try {
             response = httpRequest.execute();
@@ -43,9 +43,9 @@ public class HttpExecutor {
             LOG.error("Failed to execute HTTPRequest", exception);
             throw new IOException(exception);
         }
-        
+
         EntityUtils.consume(response);
-        
+
         return new HttpResponseParser(mapper, response);
-    }   
+    }
 }

@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class CancellableHttpRequestTest {
-    
+
     private CancellableHttpRequest request;
     private CloseableHttpAsyncClient client;
     private HttpUriRequest uriRequest;
@@ -31,19 +31,19 @@ public class CancellableHttpRequestTest {
 
     @Before
     public void setUp() throws Exception {
-        
+
         this.client = HttpClientFactory.makeHttpClient();
         this.uriRequest = new HttpGet(new URI("http://localhost:8089"));
         this.credentials = new UsernamePasswordCredentials("user", "pass");
 
         this.request = new CancellableHttpRequest(client, uriRequest, credentials);
     }
-    
+
     private class TestRunnable implements Runnable {
-        
+
         private CancellableHttpRequest request;
         private Exception exception;
-        
+
         public TestRunnable(final CancellableHttpRequest request) {
             this.request = request;
         }
@@ -56,9 +56,9 @@ public class CancellableHttpRequestTest {
             } catch (AuthenticationException | IOException | InterruptedException | ExecutionException exception) {
                 this.exception = exception;
             }
-            
+
         }
-        
+
         public Exception getException() {
             return this.exception;
         }
@@ -66,10 +66,10 @@ public class CancellableHttpRequestTest {
 
     @Test
     public void canBeCancelled() throws InterruptedException, IOException, ExecutionException {
-        
+
         client = mock(CloseableHttpAsyncClient.class);
         final Future<HttpResponse> futureResponse = mock(Future.class);
-        
+
         when(client.execute(uriRequest, null)).thenReturn(futureResponse);
         when(futureResponse.get()).then(new Answer<HttpResponse>() {
 
@@ -81,29 +81,29 @@ public class CancellableHttpRequestTest {
                     Thread.sleep(1000);
                 }
             }
-            
+
         });
-        
+
         request = new CancellableHttpRequest(client, uriRequest, credentials);
         final TestRunnable testRunnable = new TestRunnable(request);
-        
+
         final Future<?> job = Executors.newSingleThreadExecutor().submit(testRunnable);
-        
+
         Thread.sleep(500);
-        
+
         job.cancel(true);
-        
+
         while (!job.isDone()) {
             Thread.sleep(1000);
         }
-        
+
         Thread.sleep(1000);
-        
+
         assertNotNull(testRunnable.getException());
-                
+
         verify(client).start();
         verify(client).close();
-        
+
     }
 
 }

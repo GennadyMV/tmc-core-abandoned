@@ -17,9 +17,9 @@ public class Zip {
 
         return bytes;
     }
-    
+
     public int length() {
-        
+
         return bytes.length;
     }
 }

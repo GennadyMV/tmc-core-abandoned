@@ -16,8 +16,8 @@ import java.util.List;
  */
 public enum ProjectType {
 
-    JAVA_ANT("build.xml", DefaultZippingDecider.class, DefaultUnzippingDecider.class), 
-    JAVA_MAVEN("pom.xml", MavenZippingDecider.class, MavenUnzippingDecider.class), 
+    JAVA_ANT("build.xml", DefaultZippingDecider.class, DefaultUnzippingDecider.class),
+    JAVA_MAVEN("pom.xml", MavenZippingDecider.class, MavenUnzippingDecider.class),
     MAKEFILE("Makefile", DefaultZippingDecider.class, DefaultUnzippingDecider.class),
     NONE("\0", ZipAllTheThings.class, UnzipAllTheThings.class);
 
@@ -38,14 +38,14 @@ public enum ProjectType {
 
         return buildFile;
     }
-    
+
     public ZippingDecider getZippingDecider() throws InstantiationException, IllegalAccessException {
-        
+
         return zippingDeciderClass.newInstance();
     }
-    
+
     public UnzippingDecider getUnzippingDecider() throws InstantiationException, IllegalAccessException {
-        
+
         return unzippingDeciderClass.newInstance();
     }
 
@@ -67,7 +67,7 @@ public enum ProjectType {
                 }
             }
         }
-        
+
         return NONE;
     }
 

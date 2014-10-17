@@ -10,19 +10,19 @@ public class AbstractTaskListenerTest {
     public void canConstruct() {
 
         new AbstractTaskListener() {
-            
+
             @Override
             public void onSuccess(final TaskResult<? extends Object> result) { }
-            
+
             @Override
             public void onStart() { }
-            
+
             @Override
             public void onInterrupt(final TaskResult<? extends Object> result) { }
-            
+
             @Override
             public void onFailure(final TaskResult<? extends Object> result) { }
-            
+
             @Override
             public void onEnd(final TaskResult<? extends Object> result) { }
         };

@@ -10,15 +10,15 @@ import java.util.List;
 public class TestrunnerListener extends AbstractTaskListener {
 
     private final UIInvoker uiInvoker;
-    
+
     public TestrunnerListener(final UIInvoker uiInvoker) {
-        
+
         this.uiInvoker = uiInvoker;
     }
 
     @Override
-    public void onStart() { 
-        
+    public void onStart() {
+
         uiInvoker.invokeTestsRunningWindow();
     }
 
@@ -43,11 +43,11 @@ public class TestrunnerListener extends AbstractTaskListener {
 
 
     @Override
-    public void onEnd(final TaskResult<? extends Object> result) { 
-        
+    public void onEnd(final TaskResult<? extends Object> result) {
+
         uiInvoker.closeTestsRunningWindow();
     }
-    
+
     private boolean allPassed(final List<TestCaseResult> testCaseResults) {
 
         for (final TestCaseResult result : testCaseResults) {

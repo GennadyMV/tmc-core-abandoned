@@ -4,7 +4,7 @@ import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 
 public abstract class AbstractTaskListener implements TaskListener {
-       
+
     @Override
     public abstract void onStart();
 
@@ -16,7 +16,7 @@ public abstract class AbstractTaskListener implements TaskListener {
 
     @Override
     public abstract void onInterrupt(TaskResult<? extends Object> result);
-    
+
     @Override
     public abstract void onEnd(TaskResult<? extends Object> result);
 }

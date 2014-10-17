@@ -26,9 +26,9 @@ public class PathUtil {
 
         return unixPath;
     }
-    
+
     public static String getUnixPath(final File file) {
-        
+
         return getUnixPath(file.getPath());
     }
 
@@ -36,9 +36,9 @@ public class PathUtil {
 
         return getNativePath(new File(path));
     }
-    
+
     public static String getNativePath(final File file) {
-        
+
         return file.getAbsolutePath();
     }
 

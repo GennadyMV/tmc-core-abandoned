@@ -17,14 +17,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CancellableHttpRequest {
-    
+
     private static final Logger LOG = LogManager.getLogger();
     private static final int SLEEP_STEP = 1000;
-    
+
     private Credentials credentials;
     private HttpUriRequest request;
     private CloseableHttpAsyncClient client;
-    
+
     public CancellableHttpRequest(final CloseableHttpAsyncClient client, final HttpUriRequest uriRequest, final Credentials credentials) {
 
         this.request = uriRequest;
@@ -33,18 +33,18 @@ public class CancellableHttpRequest {
     }
 
     public BufferedHttpEntity execute() throws AuthenticationException, IOException, InterruptedException, ExecutionException {
-               
+
         client.start();
-        
+
         LOG.info("Making HTTP request to " + request.getURI().toString());
-        
+
         if (this.credentials != null) {
             request.addHeader(new BasicScheme(Charset.forName("UTF-8")).authenticate(this.credentials, request, null));
         }
-        
+
         final Future<HttpResponse> futureResponse = client.execute(request, null);
-        
-        while (!futureResponse.isDone()) {            
+
+        while (!futureResponse.isDone()) {
             try {
                 Thread.sleep(SLEEP_STEP);
             } catch (InterruptedException exception) {
@@ -55,21 +55,21 @@ public class CancellableHttpRequest {
                 throw exception;
             }
         }
-        
+
         final HttpResponse response = futureResponse.get();
-        
+
         client.close();
-        
+
         assertServerRespondedWithStatusCode2xx(response);
-        
+
         return new BufferedHttpEntity(response.getEntity());
     }
-    
-    
+
+
     private void assertServerRespondedWithStatusCode2xx(final HttpResponse response) throws HttpResponseException {
-        
+
         final int statusCode = response.getStatusLine().getStatusCode();
-        
+
         if (statusCode < 200 || statusCode >= 300) {
             throw new HttpResponseException(statusCode, "Expected response code 2xx, actual response was " + statusCode);
         }

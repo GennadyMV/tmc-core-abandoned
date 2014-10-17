@@ -21,9 +21,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class AbstractTaskTest {
-    
+
     private class InterruptInstantlyTask extends AbstractTask<String> {
-        
+
         public InterruptInstantlyTask(final TaskListener listener) {
 
             super("interruptInstantlyTask", listener, new TaskMonitor(1));
@@ -36,13 +36,13 @@ public class AbstractTaskTest {
         }
 
         @Override
-        protected void cleanUp() { 
+        protected void cleanUp() {
             getProgressMonitor().increment();
         }
     }
-    
+
     private class FailInstantlyTask extends AbstractTask<String> {
-        
+
         public FailInstantlyTask(final TaskListener listener) {
 
             super("failInstantlyTask", listener, new TaskMonitor(1));
@@ -59,9 +59,9 @@ public class AbstractTaskTest {
             getProgressMonitor().increment();
         }
     }
-    
+
     private class FinishInstantlyTask extends AbstractTask<String> {
-        
+
         public FinishInstantlyTask(final TaskListener listener) {
 
             super("finishInstantlyTask", listener, new TaskMonitor(1));
@@ -74,13 +74,13 @@ public class AbstractTaskTest {
         }
 
         @Override
-        protected void cleanUp() { 
+        protected void cleanUp() {
             getProgressMonitor().increment();
         }
     }
-    
+
     private class NeverFinishTask extends AbstractTask<String> {
-        
+
         public NeverFinishTask(final TaskListener listener) {
 
             super("neverFinishTask", listener, new TaskMonitor(1));
@@ -95,90 +95,90 @@ public class AbstractTaskTest {
         }
 
         @Override
-        protected void cleanUp() { 
+        protected void cleanUp() {
             getProgressMonitor().increment();
         }
     }
-    
-    private TaskListener listener; 
-    
+
+    private TaskListener listener;
+
     @Before
     public void setUp() {
-        
+
         listener = mock(AbstractTaskListener.class);
-        
+
     }
 
     @Test
     public void successCallsListenerCorrectly() {
-        
+
         final Task task = new FinishInstantlyTask(listener);
-        
+
         task.run();
-        
+
         //Assert cleanUp() not called. Only increment is in cleanUp()
         assertEquals(0, task.getProgressMonitor().progress());
-        
+
         assertTrue(task.getProgressMonitor().isStarted());
         assertEquals("finishInstantlyTask", task.getDescription());
-        
+
         verify(listener).onStart();
         verify(listener).onSuccess(any(TaskResult.class));
         verify(listener).onEnd(any(TaskResult.class));
         verifyNoMoreInteractions(listener);
     }
-    
+
     @Test
     public void interruptCallsListenerCorrectly() {
-        
+
         final Task task = new InterruptInstantlyTask(listener);
-        
+
         task.run();
-        
+
         //Assert cleanUp() called. Only increment is in cleanUp()
         assertEquals(1, task.getProgressMonitor().progress());
-        
+
         assertTrue(task.getProgressMonitor().isStarted());
         assertEquals("interruptInstantlyTask", task.getDescription());
-        
+
         verify(listener).onStart();
         verify(listener).onInterrupt(any(TaskResult.class));
         verify(listener).onEnd(any(TaskResult.class));
         verifyNoMoreInteractions(listener);
     }
-    
+
     @Test
     public void failureCallsListenerCorrectly() {
-        
+
         final Task task = new FailInstantlyTask(listener);
-        
+
         task.run();
-        
+
         //Assert cleanUp() called. Only increment is in cleanUp()
         assertEquals(1, task.getProgressMonitor().progress());
-        
+
         assertTrue(task.getProgressMonitor().isStarted());
         assertEquals("failInstantlyTask", task.getDescription());
-        
+
         verify(listener).onStart();
         verify(listener).onFailure(any(TaskResult.class));
         verify(listener).onEnd(any(TaskResult.class));
         verifyNoMoreInteractions(listener);
     }
-    
+
     @Test
     public void taskCanBeInterruptedWhenSubmittedToExecutorService() throws InterruptedException {
-        
+
         final Task task = new NeverFinishTask(listener);
         final Future<?> job = Executors.newFixedThreadPool(1).submit(task);
-        
+
         Thread.sleep(500);
         job.cancel(true);
         Thread.sleep(500);
-        
+
         assertTrue(task.getProgressMonitor().isStarted());
         assertEquals("neverFinishTask", task.getDescription());
-        
+
         verify(listener).onStart();
         verify(listener).onInterrupt(any(TaskResult.class));
         verify(listener).onEnd(any(TaskResult.class));

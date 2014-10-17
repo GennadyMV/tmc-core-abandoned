@@ -11,6 +11,6 @@ public interface ZippingDecider {
      * Directory paths always end in a slash.
      */
     boolean shouldZip(String zipPath);
-    
-    
+
+
 }

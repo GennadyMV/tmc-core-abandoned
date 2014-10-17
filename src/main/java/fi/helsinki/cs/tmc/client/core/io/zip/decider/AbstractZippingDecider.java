@@ -10,31 +10,31 @@ import java.io.File;
 public abstract class AbstractZippingDecider implements ZippingDecider {
 
     private Project project;
-    
+
     public Project getProject() {
-        
+
         return this.project;
     }
-    
+
     public void setProject(final Project project) {
-        
+
         this.project = project;
     }
-    
+
     @Override
     public boolean shouldZip(final String zipPath) {
-        
+
         if (project == null) {
             throw new IllegalArgumentException("Project not set");
         }
-        
+
         if (isNoSubmitFolder(zipPath)) {
             return false;
         }
-        
+
         return isStudentFile(zipPath);
     }
-    
+
     protected abstract boolean isStudentFile(String zipPath);
 
     /**
@@ -43,7 +43,7 @@ public abstract class AbstractZippingDecider implements ZippingDecider {
     private boolean isNoSubmitFolder(final String zipPath) {
 
         final File dir = new File(new File(project.getRootPath()).getParentFile(), zipPath);
-        
+
         if (!dir.isDirectory()) {
             return true;
         }

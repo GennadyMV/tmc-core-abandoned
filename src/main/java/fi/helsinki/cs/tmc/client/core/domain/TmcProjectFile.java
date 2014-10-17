@@ -14,9 +14,9 @@ public class TmcProjectFile {
 
         extraStudentFiles = Collections.emptyList();
     }
-    
+
     public TmcProjectFile(final List<String> extraStudentFiles) {
-        
+
         this.extraStudentFiles = Collections.unmodifiableList(extraStudentFiles);
     }
 

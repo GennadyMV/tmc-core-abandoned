@@ -32,10 +32,10 @@ public class Unzipper {
 
         destinationFolder.createFolderTree(false);
         final ZipInputStream zipStream = new ZipInputStream(new ByteArrayInputStream(project.getBytes()));
-        
+
         ZipEntry zipEntry = zipStream.getNextEntry();
         while (zipEntry != null) {
-            
+
             final String entryAbsolutePath = PathUtil.append(destinationFolder.getPath(), zipEntry.getName());
 
             projectFiles.add(entryAbsolutePath);
@@ -49,7 +49,7 @@ public class Unzipper {
             file.createFolderTree(!zipEntry.isDirectory());
 
             if (!zipEntry.isDirectory()) {
-                
+
                 writeFile(zipStream, file);
             }
 
@@ -63,12 +63,12 @@ public class Unzipper {
 
         final ByteArrayOutputStream writeStream = new ByteArrayOutputStream();
         final byte[] buffer = new byte[BUFFER_SIZE];
-        
+
         while (zipStream.available() != 0) {
-            
+
             writeStream.write(buffer, 0, zipStream.read(buffer));
         }
-        
+
         file.write(writeStream.toByteArray());
     }
 }

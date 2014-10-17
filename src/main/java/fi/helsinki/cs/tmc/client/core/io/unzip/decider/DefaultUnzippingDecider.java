@@ -15,14 +15,14 @@ public class DefaultUnzippingDecider extends AbstractUnzippingDecider {
     public boolean isProtectedFile(final String filePath) {
 
         final String srcRoot = getProject().getRootPath() + "/src";
-        
+
         if (filePath.startsWith(srcRoot) && (filePath.equals(srcRoot) || filePath.charAt(srcRoot.length()) == '/')) {
-            
+
             final FileIO file = new FileIO(filePath);
-            
+
             return !(file.fileExists());
         }
-        
+
         return false;
     }
 

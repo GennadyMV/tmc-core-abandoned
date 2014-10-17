@@ -96,7 +96,7 @@ public class Project {
         if (type == null) {
             return "";
         }
-        
+
         synchronized (projectFiles) {
             if (projectFiles.size() == 1) {
                 final File projectFile = new File(projectFiles.get(0));

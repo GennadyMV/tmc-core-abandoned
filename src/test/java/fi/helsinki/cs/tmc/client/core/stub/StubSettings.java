@@ -4,10 +4,10 @@ import fi.helsinki.cs.tmc.client.core.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 
 public class StubSettings implements Settings {
-    
+
     @Override
     public String tmcServerBaseUrl() {
-    
+
         return "";
     }
 

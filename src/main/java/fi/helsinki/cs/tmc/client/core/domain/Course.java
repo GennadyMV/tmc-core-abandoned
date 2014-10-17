@@ -138,26 +138,26 @@ public class Course {
     public List<Exercise> getDownloadableExercises() {
 
         final List<Exercise> downloadableExercises = new ArrayList<Exercise>();
-        
+
         for (final Exercise e : getExercises()) {
             if ((e.isDownloadable() || e.shouldBeUpdated()) && !e.isCompleted()) {
                 downloadableExercises.add(e);
             }
         }
-        
+
         return downloadableExercises;
     }
 
     public List<Exercise> getCompletedDownloadableExercises() {
 
         final List<Exercise> completedExercises = new ArrayList<Exercise>();
-        
+
         for (final Exercise e : getExercises()) {
             if ((e.isDownloadable() || e.shouldBeUpdated()) && e.isCompleted()) {
                 completedExercises.add(e);
             }
         }
-        
+
         return completedExercises;
     }
 
@@ -189,17 +189,17 @@ public class Course {
         if (this == other) {
             return true;
         }
-            
+
         if (other == null) {
             return false;
         }
-            
+
         if (getClass() != other.getClass()) {
             return false;
         }
-            
+
         final Course otherCourse = (Course) other;
-        
+
         if (name == null) {
             if (otherCourse.name != null) {
                 return false;
@@ -207,7 +207,7 @@ public class Course {
         } else if (!name.equals(otherCourse.name)) {
             return false;
         }
-            
+
         return true;
     }
 }

@@ -16,7 +16,7 @@ import org.apache.commons.io.IOUtils;
 
 
 public class RecursiveZipper {
-    
+
     private static final Logger LOG = Logger.getLogger(RecursiveZipper.class.getName());
 
     private final FileIO rootDirectory;
@@ -31,7 +31,7 @@ public class RecursiveZipper {
     /**
      * Zip up a project directory, only including stuff decided by the
      * {@link ZippingDecider}.
-     * 
+     *
      * @throws IOException
      */
     public byte[] zipProjectSources() throws IOException {
@@ -90,7 +90,7 @@ public class RecursiveZipper {
                 if (isDirectory) {
                     zipPath += "/";
                 }
-                
+
                 if (zippingDecider.shouldZip(zipPath)) {
                     if (isDirectory) {
                         zipRecursively(file, zipStream, thisDirZipPath);

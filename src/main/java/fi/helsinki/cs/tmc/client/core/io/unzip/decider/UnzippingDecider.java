@@ -10,7 +10,7 @@ import fi.helsinki.cs.tmc.client.core.domain.Project;
 public interface UnzippingDecider {
 
     boolean shouldUnzip(String filePath);
-    
+
     void setProject(Project project);
     Project getProject();
 }
