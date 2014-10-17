@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
