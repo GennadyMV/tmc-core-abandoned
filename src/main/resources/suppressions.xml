@@ -7,6 +7,9 @@
 	<!-- JUnit Rules require the rules field to have public visibility. -->
 	<suppress files='.*(?:Test)\.java$' checks='VisibilityModifier' />
 	
+	<!-- Mockito requires a "throws Throwable" -->
+	<suppress files='.*(?:Test)\.java$' checks='IllegalThrows' />
+	
 	<suppress checks='.' files='fi/helsinki/cs/tmc/core/spyware/utility/diff_match_patch.java' />
 	<suppress checks='.' files='fi/helsinki/cs/tmc/core/services/http/*' />
 
