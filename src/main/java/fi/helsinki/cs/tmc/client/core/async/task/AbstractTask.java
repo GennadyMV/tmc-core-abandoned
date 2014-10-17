@@ -33,7 +33,7 @@ public abstract class AbstractTask<S> implements Task<S> {
         TaskResult<S> result; 
         try {
             
-            result = work();
+            result = new TaskResult<S>(TaskResult.Status.SUCCESS, work());
             
             listener.onSuccess(result);
             
@@ -74,7 +74,7 @@ public abstract class AbstractTask<S> implements Task<S> {
         return monitor;
     }
     
-    protected abstract TaskResult<S> work() throws InterruptedException, TaskFailureException;
+    protected abstract S work() throws InterruptedException, TaskFailureException;
     
     protected abstract void cleanUp();
     

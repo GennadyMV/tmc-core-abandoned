@@ -2,7 +2,6 @@ package fi.helsinki.cs.tmc.client.core.async.task;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
-import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
 import fi.helsinki.cs.tmc.client.core.domain.Project;
 import fi.helsinki.cs.tmc.client.core.domain.TestRunResult;
@@ -34,7 +33,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
     public abstract int runMavenGoal(String goal, Project project);
     
     @Override
-    public TaskResult<TestRunResult> work() throws TaskFailureException, InterruptedException {
+    public TestRunResult work() throws TaskFailureException, InterruptedException {
         
         compile();
         
@@ -42,7 +41,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
         
         final TestRunResult result = parseResult();
         
-        return new TaskResult<>(result);
+        return result;
     }
 
     private void compile() throws TaskFailureException, InterruptedException {
