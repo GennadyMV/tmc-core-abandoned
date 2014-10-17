@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,51 +20,22 @@ public class Exercise implements Serializable {
     private transient Course course;
     private String courseName;
     private Date deadlineDate;
-
-    @SerializedName("deadline")
     private String deadlineString;
-
-    /**
-     * The URL this exercise can be downloaded from.
-     */
-    @SerializedName("zip_url")
     private String downloadUrl;
-
-    /**
-     * The URL the solution can be downloaded from (admins only).
-     */
-    @SerializedName("solution_zip_url")
     private String solutionDownloadUrl;
-
-    /**
-     * The URL where this exercise should be posted for review.
-     */
-    @SerializedName("return_url")
     private String returnUrl;
-
     private boolean locked;
-
-    @SerializedName("deadline_description")
     private String deadlineDescription;
-
     private boolean returnable;
-    
-    @SerializedName("requires_review")
     private boolean requiresReview;
-    
     private boolean attempted;
     private boolean completed;
     private boolean reviewed;
-    
-    @SerializedName("all_review_points_given")
     private boolean allReviewPointsGiven;
-
     private String oldChecksum;
     private boolean updateAvailable;
     private String checksum;
     private transient Project project;
-
-    @SerializedName("memory_limit")
     private Integer memoryLimit;
 
     public Exercise() { }

@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -16,28 +14,13 @@ public class SubmissionResult {
         OK, FAIL, ERROR, PROCESSING
     }
 
-    @SerializedName("status")
     private Status status;
-
-    @SerializedName("error")
     private String error;
-
-    @SerializedName("test_cases")
     private List<TestCaseResult> testCases;
-
-    @SerializedName("solution_url")
     private String solutionUrl;
-
-    @SerializedName("points")
     private List<String> points;
-
-    @SerializedName("missing_review_points")
     private List<String> missingReviewPoints;
-
-    @SerializedName("feedback_questions")
     private List<FeedbackQuestion> feedbackQuestions;
-
-    @SerializedName("feedback_answer_url")
     private String feedbackAnswerUrl;
 
     public SubmissionResult() {

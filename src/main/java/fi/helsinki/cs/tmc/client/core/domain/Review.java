@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.Date;
 import java.util.List;
 
@@ -10,40 +8,17 @@ import java.util.List;
  */
 public class Review {
 
-    @SerializedName("id")
     private int id;
-
-    @SerializedName("submission_id")
     private int submissionId;
-
-    @SerializedName("exercise_name")
     private String exerciseName;
-
-    @SerializedName("marked_as_read")
     private boolean markedAsRead;
-
-    @SerializedName("reviewer_name")
     private String reviewerName;
-
-    @SerializedName("review_body")
     private String reviewBody;
-
-    @SerializedName("points")
     private List<String> points;
-
-    @SerializedName("points_not_awarded")
     private List<String> pointsNotAwarded;
-
-    @SerializedName("url")
     private String url;
-
-    @SerializedName("update_url")
     private String updateUrl;
-
-    @SerializedName("created_at")
     private Date createdAt;
-
-    @SerializedName("updated_at")
     private Date updatedAt;
 
     public int getId() {

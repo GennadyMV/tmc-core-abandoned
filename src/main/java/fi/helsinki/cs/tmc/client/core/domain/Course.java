@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +12,14 @@ public class Course {
     private int id;
     private String name;
 
-    @SerializedName("details_url")
     private String detailsUrl;
 
-    @SerializedName("unlock_url")
     private String unlockUrl;
 
-    @SerializedName("reviews_url")
     private String reviewsUrl;
 
-    @SerializedName("comet_url")
     private String cometUrl;
 
-    @SerializedName("spyware_urls")
     private List<String> spywareUrls;
 
     private boolean exercisesLoaded;

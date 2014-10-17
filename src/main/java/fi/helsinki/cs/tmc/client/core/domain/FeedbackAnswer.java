@@ -1,8 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 /**
  * A domain class for storing a single answer to a feedback question.
  */
@@ -40,13 +37,5 @@ public class FeedbackAnswer {
     public void setAnswer(final String answer) {
 
         this.answer = answer;
-    }
-
-    public String toJson() {
-
-        final JsonObject obj = new JsonObject();
-        obj.addProperty("question_id", question.getId());
-        obj.addProperty("answer", answer);
-        return new Gson().toJson(obj);
     }
 }

@@ -1,13 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
 import java.lang.reflect.Type;
 import java.util.Objects;
 
@@ -56,24 +48,5 @@ public final class ExerciseKey {
     public String toString() {
 
         return courseName + "/" + exerciseName;
-    }
-
-    public static class GsonAdapter implements JsonSerializer<ExerciseKey>, JsonDeserializer<ExerciseKey> {
-
-        @Override
-        public JsonElement serialize(final ExerciseKey key, final Type type, final JsonSerializationContext jsc) {
-
-            return new JsonPrimitive(key.toString());
-        }
-
-        @Override
-        public ExerciseKey deserialize(final JsonElement je, final Type type, final JsonDeserializationContext jdc) {
-
-            final String[] parts = je.getAsString().split("/", 2);
-            if (parts.length != 2) {
-                throw new JsonParseException("Invalid ExerciseKey representation: \"" + je.getAsString() + "\"");
-            }
-            return new ExerciseKey(parts[0], parts[1]);
-        }
     }
 }
