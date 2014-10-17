@@ -86,6 +86,23 @@
 		    <version>2.0.2</version>
 	    </dependency>
 		
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.8</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- WireMock -->
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock</artifactId>
+			<version>1.48</version>
+			<scope>test</scope>
+			<classifier>standalone</classifier>
+		</dependency>
+		
   </dependencies>
   
   <build>
