@@ -23,7 +23,7 @@ public abstract class AbstractTask<S> implements Task<S> {
         this.listener = listener;
         this.monitor = taskProgressMonitor;
     }
-    
+
     @Override
     public void run() {
         
