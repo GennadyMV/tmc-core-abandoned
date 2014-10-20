@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.exception;
 
-
 public abstract class TmcException extends Exception {
 
     public TmcException() {

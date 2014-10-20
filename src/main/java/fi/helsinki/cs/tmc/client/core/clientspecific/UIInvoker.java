@@ -4,7 +4,6 @@ import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 
 import java.util.List;
 
-
 public interface UIInvoker {
 
     /* Code review */
@@ -19,6 +18,4 @@ public interface UIInvoker {
     void invokeSubmitToServerWindow();
     void invokerSomeTestsFailedLocallyWindow();
 
-
 }
-

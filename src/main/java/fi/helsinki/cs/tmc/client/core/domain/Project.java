@@ -58,6 +58,7 @@ public class Project {
             final List<String> files = new ArrayList<String>(projectFiles);
             type = ProjectType.findProjectType(files);
         }
+
         return type;
     }
 
@@ -66,6 +67,7 @@ public class Project {
         if (file == null || rootPath.isEmpty()) {
             return false;
         }
+
         return (file + "/").contains(rootPath + "/");
     }
 
@@ -77,6 +79,7 @@ public class Project {
         }
 
         final Project p = (Project) o;
+
         if (exercise == null || p.exercise == null) {
             return false;
         }
@@ -93,6 +96,7 @@ public class Project {
     private String buildRootPath() {
 
         final ProjectType type = getProjectType();
+
         if (type == null) {
             return "";
         }

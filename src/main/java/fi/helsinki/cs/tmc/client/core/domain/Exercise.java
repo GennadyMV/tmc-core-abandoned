@@ -12,7 +12,6 @@ import java.util.Date;
 public class Exercise implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssX";
 
     private int id;
@@ -206,9 +205,11 @@ public class Exercise implements Serializable {
         if (returnAddress == null) {
             throw new NullPointerException("returnAddress was null at Exercise.setReturnAddress");
         }
+
         if (returnAddress.isEmpty()) {
             throw new IllegalArgumentException("downloadAddress cannot be empty at Exercise.setReturnAddress");
         }
+
         returnUrl = returnAddress;
     }
 
@@ -326,9 +327,11 @@ public class Exercise implements Serializable {
         }
 
         final Exercise e = (Exercise) o;
+
         if (courseName == null || e.courseName == null) {
             return false;
         }
+
         if (name == null || e.name == null) {
             return false;
         }

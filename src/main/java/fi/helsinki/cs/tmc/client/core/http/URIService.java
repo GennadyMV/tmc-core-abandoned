@@ -40,5 +40,4 @@ public class URIService {
         final String oldPath = builder.getPath();
         builder.setPath(oldPath.concat(appendedString));
     }
-
 }

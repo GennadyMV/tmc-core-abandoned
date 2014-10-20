@@ -29,7 +29,6 @@ public class JacksonStackTraceElementModule extends SimpleModule {
             generator.writeStringField("fileName", element.getFileName());
             generator.writeNumberField("lineNumber", element.getLineNumber());
             generator.writeEndObject();
-
         }
     }
 
@@ -61,5 +60,4 @@ public class JacksonStackTraceElementModule extends SimpleModule {
         this.addSerializer(new StackTraceElementSerializer());
         this.addDeserializer(StackTraceElement.class, new StackTraceElementDeserializer());
     }
-
 }

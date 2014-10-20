@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.async.exception;
 
-
 public class TaskFailureException extends Exception {
 
     public TaskFailureException() {

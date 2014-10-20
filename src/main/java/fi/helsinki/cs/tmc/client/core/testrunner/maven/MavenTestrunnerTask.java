@@ -96,7 +96,6 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
         checkForInterrupt();
 
         return results;
-
     }
 
     @Override

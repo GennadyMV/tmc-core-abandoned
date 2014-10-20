@@ -45,13 +45,11 @@ public class TestrunnerListener extends AbstractTaskListener {
         uiInvoker.closeTestsRunningWindow();
     }
 
-
     @Override
     public void onInterrupt(final TaskResult<? extends Object> result) {
 
         uiInvoker.closeTestsRunningWindow();
     }
-
 
     @Override
     public void onEnd(final TaskResult<? extends Object> result) { }

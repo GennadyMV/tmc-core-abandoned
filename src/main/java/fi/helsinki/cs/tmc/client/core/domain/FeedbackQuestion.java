@@ -71,6 +71,7 @@ public class FeedbackQuestion {
     public int getIntRangeMin() {
 
         final Matcher matcher = intRangeMatcher();
+
         if (matcher.matches()) {
             return Integer.parseInt(matcher.group(1));
         } else {
@@ -81,6 +82,7 @@ public class FeedbackQuestion {
     public int getIntRangeMax() {
 
         final Matcher matcher = intRangeMatcher();
+
         if (matcher.matches()) {
             return Integer.parseInt(matcher.group(2));
         } else {

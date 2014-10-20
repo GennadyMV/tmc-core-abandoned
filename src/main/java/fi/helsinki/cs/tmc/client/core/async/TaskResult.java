@@ -2,7 +2,6 @@ package fi.helsinki.cs.tmc.client.core.async;
 
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
 
-
 public class TaskResult<S> {
 
     public enum Status {

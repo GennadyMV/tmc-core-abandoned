@@ -11,29 +11,17 @@ public class Course {
 
     private int id;
     private String name;
-
     private String detailsUrl;
-
     private String unlockUrl;
-
     private String reviewsUrl;
-
     private String cometUrl;
-
     private List<String> spywareUrls;
-
     private boolean exercisesLoaded;
-
     private List<Exercise> exercises;
     private List<String> unlockables;
 
     public Course() {
 
-        /*
-         * In case of a missing name-field in the JSON, GSON would replace any
-         * default value of name with null. Therefore using f.ex. empty string
-         * here is useless.
-         */
         this(null);
     }
 

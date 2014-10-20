@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.async;
 
-
 public class TaskMonitor {
 
     private final int steps;

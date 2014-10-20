@@ -64,5 +64,4 @@ public class JsonParser {
         return arrayType.getClass();
 
     }
-
 }

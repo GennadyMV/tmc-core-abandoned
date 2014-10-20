@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.exception;
 
-
 public abstract class UserVisibleException extends TmcException {
 
     public UserVisibleException() {
