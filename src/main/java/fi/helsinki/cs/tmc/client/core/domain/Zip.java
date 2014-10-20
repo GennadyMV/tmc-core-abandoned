@@ -20,6 +20,6 @@ public class Zip {
 
     public int length() {
 
-        return bytes.length;
+        return bytes != null ? bytes.length : 0;
     }
 }
