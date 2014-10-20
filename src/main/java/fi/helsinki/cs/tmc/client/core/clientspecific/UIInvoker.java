@@ -17,6 +17,7 @@ public interface UIInvoker {
     void invokeTestsRunningWindow();
     void closeTestsRunningWindow();
     void invokeSubmitToServerWindow();
+    void invokerSomeTestsFailedLocallyWindow();
 
 
 }

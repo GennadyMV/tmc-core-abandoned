@@ -15,24 +15,27 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
+public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
 
     public static final String DESCRIPTION = "Running tests";
+    public static final String COMPILE_GOAL = "test-compile";
+    public static final String TESTRUNNER_GOAL = "fi.helsinki.cs.tmc:tmc-maven-plugin:1.6:test";
 
     private static final Logger LOG = LogManager.getLogger();
-
     private static final int MAVEN_SUCCESS = 0;
 
+    private final MavenRunner mavenRunner;
     private final Project project;
+    private final TestResultFileReader resultFileReader;
 
-    public MavenTestrunnerTask(final TaskListener listener, final Project project) {
+    public MavenTestrunnerTask(final TaskListener listener, final Project project, final MavenRunner mavenRunner, final TestResultFileReader resultFileReader) {
 
-        super(DESCRIPTION, listener, new TaskMonitor(1));
+        super(DESCRIPTION, listener, new TaskMonitor(3));
 
         this.project = project;
+        this.mavenRunner = mavenRunner;
+        this.resultFileReader = resultFileReader;
     }
-
-    public abstract int runMavenGoal(String goal, Project project);
 
     @Override
     public TestRunResult work() throws TaskFailureException, InterruptedException {
@@ -48,7 +51,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
 
     private void compile() throws TaskFailureException, InterruptedException {
 
-        final int result = runMavenGoal("test-compile", project);
+        final int result = mavenRunner.runGoal(COMPILE_GOAL, project);
 
         if (result != MAVEN_SUCCESS) {
             throw new TaskFailureException("Unable to compile project");
@@ -61,7 +64,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
 
     private void test() throws TaskFailureException, InterruptedException {
 
-        final int result = runMavenGoal("fi.helsinki.cs.tmc:tmc-maven-plugin:1.6:test", project);
+        final int result = mavenRunner.runGoal(TESTRUNNER_GOAL, project);
 
         if (result != MAVEN_SUCCESS) {
             throw new TaskFailureException("Unable to run TMC tests");
@@ -79,7 +82,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
 
         try {
 
-            results = new TestResultFileReader().parseTestResults(resultFile);
+            results = resultFileReader.parseTestResults(resultFile);
             resultFile.delete();
 
         } catch (final IOException exception) {
@@ -95,4 +98,7 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
         return results;
 
     }
+
+    @Override
+    protected void cleanUp() { }
 }
