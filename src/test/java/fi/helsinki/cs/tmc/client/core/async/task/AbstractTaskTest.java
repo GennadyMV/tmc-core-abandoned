@@ -37,7 +37,7 @@ public class AbstractTaskTest {
 
         @Override
         protected void cleanUp() {
-            getProgressMonitor().increment();
+            getMonitor().increment();
         }
     }
 
@@ -56,7 +56,7 @@ public class AbstractTaskTest {
 
         @Override
         protected void cleanUp() {
-            getProgressMonitor().increment();
+            getMonitor().increment();
         }
     }
 
@@ -75,7 +75,7 @@ public class AbstractTaskTest {
 
         @Override
         protected void cleanUp() {
-            getProgressMonitor().increment();
+            getMonitor().increment();
         }
     }
 
@@ -96,7 +96,7 @@ public class AbstractTaskTest {
 
         @Override
         protected void cleanUp() {
-            getProgressMonitor().increment();
+            getMonitor().increment();
         }
     }
 
@@ -117,9 +117,9 @@ public class AbstractTaskTest {
         task.run();
 
         //Assert cleanUp() not called. Only increment is in cleanUp()
-        assertEquals(0, task.getProgressMonitor().progress());
+        assertEquals(0, task.getMonitor().progress());
 
-        assertTrue(task.getProgressMonitor().isStarted());
+        assertTrue(task.getMonitor().isStarted());
         assertEquals("finishInstantlyTask", task.getDescription());
 
         verify(listener).onStart();
@@ -136,9 +136,9 @@ public class AbstractTaskTest {
         task.run();
 
         //Assert cleanUp() called. Only increment is in cleanUp()
-        assertEquals(1, task.getProgressMonitor().progress());
+        assertEquals(1, task.getMonitor().progress());
 
-        assertTrue(task.getProgressMonitor().isStarted());
+        assertTrue(task.getMonitor().isStarted());
         assertEquals("interruptInstantlyTask", task.getDescription());
 
         verify(listener).onStart();
@@ -155,9 +155,9 @@ public class AbstractTaskTest {
         task.run();
 
         //Assert cleanUp() called. Only increment is in cleanUp()
-        assertEquals(1, task.getProgressMonitor().progress());
+        assertEquals(1, task.getMonitor().progress());
 
-        assertTrue(task.getProgressMonitor().isStarted());
+        assertTrue(task.getMonitor().isStarted());
         assertEquals("failInstantlyTask", task.getDescription());
 
         verify(listener).onStart();
@@ -176,7 +176,7 @@ public class AbstractTaskTest {
         job.cancel(true);
         Thread.sleep(500);
 
-        assertTrue(task.getProgressMonitor().isStarted());
+        assertTrue(task.getMonitor().isStarted());
         assertEquals("neverFinishTask", task.getDescription());
 
         verify(listener).onStart();

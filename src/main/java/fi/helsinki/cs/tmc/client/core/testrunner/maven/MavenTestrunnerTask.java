@@ -54,9 +54,9 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
             throw new TaskFailureException("Unable to compile project");
         }
 
-        checkForInterrupt();
+        getMonitor().increment();
 
-        getProgressMonitor().increment();
+        checkForInterrupt();
     }
 
     private void test() throws TaskFailureException, InterruptedException {
@@ -67,9 +67,9 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
             throw new TaskFailureException("Unable to run TMC tests");
         }
 
-        checkForInterrupt();
+        getMonitor().increment();
 
-        getProgressMonitor().increment();
+        checkForInterrupt();
     }
 
     private TestRunResult parseResult() throws TaskFailureException, InterruptedException {
@@ -88,9 +88,9 @@ public abstract class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
             throw new TaskFailureException("Unable to parse test file.");
         }
 
-        checkForInterrupt();
+        getMonitor().increment();
 
-        getProgressMonitor().increment();
+        checkForInterrupt();
 
         return results;
 

@@ -69,7 +69,7 @@ public abstract class AbstractTask<S> implements Task<S> {
     }
 
     @Override
-    public TaskMonitor getProgressMonitor() {
+    public TaskMonitor getMonitor() {
 
         return monitor;
     }
