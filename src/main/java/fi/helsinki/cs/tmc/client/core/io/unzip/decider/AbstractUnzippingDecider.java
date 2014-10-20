@@ -2,7 +2,7 @@ package fi.helsinki.cs.tmc.client.core.io.unzip.decider;
 
 import fi.helsinki.cs.tmc.client.core.domain.Project;
 import fi.helsinki.cs.tmc.client.core.io.FileIO;
-import fi.helsinki.cs.tmc.client.core.io.TmcProjectFileReader;
+import fi.helsinki.cs.tmc.client.core.io.reader.TmcProjectFileReader;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import fi.helsinki.cs.tmc.client.core.Settings;
+import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.stub.StubSettings;
 import fi.helsinki.cs.tmc.client.core.testutil.SimpleObject;
 

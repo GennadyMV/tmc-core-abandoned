@@ -2,8 +2,8 @@ package fi.helsinki.cs.tmc.client.core.io.unzip;
 
 import fi.helsinki.cs.tmc.client.core.domain.Zip;
 import fi.helsinki.cs.tmc.client.core.io.FileIO;
+import fi.helsinki.cs.tmc.client.core.io.PathUtil;
 import fi.helsinki.cs.tmc.client.core.io.unzip.decider.UnzippingDecider;
-import fi.helsinki.cs.tmc.client.core.util.PathUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

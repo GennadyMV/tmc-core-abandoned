@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.client.core.util;
+package fi.helsinki.cs.tmc.client.core.io;
 
 import java.io.File;
 

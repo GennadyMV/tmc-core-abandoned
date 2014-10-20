@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.http;
 
-import fi.helsinki.cs.tmc.client.core.Settings;
+import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 
 import java.net.URI;
 import java.net.URISyntaxException;

@@ -1,8 +1,8 @@
 package fi.helsinki.cs.tmc.client.core.io.zip;
 
 import fi.helsinki.cs.tmc.client.core.io.FileIO;
+import fi.helsinki.cs.tmc.client.core.io.PathUtil;
 import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZippingDecider;
-import fi.helsinki.cs.tmc.client.core.util.PathUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

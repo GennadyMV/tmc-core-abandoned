@@ -1,6 +1,7 @@
-package fi.helsinki.cs.tmc.client.core.io;
+package fi.helsinki.cs.tmc.client.core.io.reader;
 
 import fi.helsinki.cs.tmc.client.core.domain.TmcProjectFile;
+import fi.helsinki.cs.tmc.client.core.io.FileIO;
 
 import java.io.IOException;
 import java.io.Reader;

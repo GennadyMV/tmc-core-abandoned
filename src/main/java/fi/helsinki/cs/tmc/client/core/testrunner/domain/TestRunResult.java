@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.client.core.domain;
+package fi.helsinki.cs.tmc.client.core.testrunner.domain;
 
 import java.util.List;
 

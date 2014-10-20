@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core;
 
-import fi.helsinki.cs.tmc.client.core.ui.UIInvoker;
+import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
+import fi.helsinki.cs.tmc.client.core.clientspecific.UIInvoker;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

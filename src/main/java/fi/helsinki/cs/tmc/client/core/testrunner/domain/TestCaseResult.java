@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.client.core.domain;
+package fi.helsinki.cs.tmc.client.core.testrunner.domain;
 
 import fi.helsinki.cs.tmc.testrunner.CaughtException;
 import fi.helsinki.cs.tmc.testrunner.TestCase;

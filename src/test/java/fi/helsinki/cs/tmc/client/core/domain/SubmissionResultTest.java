@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
 import fi.helsinki.cs.tmc.client.core.domain.SubmissionResult.Status;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 
 import java.util.ArrayList;
 import java.util.List;

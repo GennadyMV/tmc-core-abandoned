@@ -1,11 +1,11 @@
-package fi.helsinki.cs.tmc.client.core.io;
+package fi.helsinki.cs.tmc.client.core.io.reader;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import fi.helsinki.cs.tmc.client.core.domain.TestCaseResult;
-import fi.helsinki.cs.tmc.client.core.domain.TestRunResult;
-import fi.helsinki.cs.tmc.testrunner.StackTraceSerializer;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
+import fi.helsinki.cs.tmc.client.core.testrunner.json.JacksonStackTraceElementModule;
 import fi.helsinki.cs.tmc.testrunner.TestCase;
 import fi.helsinki.cs.tmc.testrunner.TestCaseList;
 

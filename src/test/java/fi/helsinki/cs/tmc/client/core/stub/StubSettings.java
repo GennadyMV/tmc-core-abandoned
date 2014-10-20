@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.stub;
 
-import fi.helsinki.cs.tmc.client.core.Settings;
+import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 
 public class StubSettings implements Settings {

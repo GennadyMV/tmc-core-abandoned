@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import fi.helsinki.cs.tmc.client.core.util.PathUtil;
+import fi.helsinki.cs.tmc.client.core.io.PathUtil;
 
 import java.io.File;
 import java.util.ArrayList;

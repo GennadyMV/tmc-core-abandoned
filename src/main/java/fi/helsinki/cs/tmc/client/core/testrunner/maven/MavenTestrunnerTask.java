@@ -1,11 +1,13 @@
-package fi.helsinki.cs.tmc.client.core.async.task;
+package fi.helsinki.cs.tmc.client.core.testrunner.maven;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
+import fi.helsinki.cs.tmc.client.core.async.task.AbstractTask;
+import fi.helsinki.cs.tmc.client.core.clientspecific.MavenRunner;
 import fi.helsinki.cs.tmc.client.core.domain.Project;
-import fi.helsinki.cs.tmc.client.core.domain.TestRunResult;
-import fi.helsinki.cs.tmc.client.core.io.TestResultFileReader;
+import fi.helsinki.cs.tmc.client.core.io.reader.TestResultFileReader;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
 import java.io.File;
 import java.io.IOException;

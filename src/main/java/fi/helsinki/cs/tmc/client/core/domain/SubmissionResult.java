@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
+
 import java.util.Collections;
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package fi.helsinki.cs.tmc.client.core.ui;
+package fi.helsinki.cs.tmc.client.core.clientspecific;
 
-import fi.helsinki.cs.tmc.client.core.domain.TestCaseResult;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 
 import java.util.List;
 

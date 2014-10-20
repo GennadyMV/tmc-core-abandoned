@@ -1,7 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.io;
 
-import fi.helsinki.cs.tmc.client.core.util.PathUtil;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

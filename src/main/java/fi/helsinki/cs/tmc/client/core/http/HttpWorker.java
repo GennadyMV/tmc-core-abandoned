@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
-import fi.helsinki.cs.tmc.client.core.Settings;
+import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 
 import java.net.URI;
 

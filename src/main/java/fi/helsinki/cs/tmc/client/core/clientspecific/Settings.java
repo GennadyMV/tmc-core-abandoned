@@ -1,4 +1,4 @@
-package fi.helsinki.cs.tmc.client.core;
+package fi.helsinki.cs.tmc.client.core.clientspecific;
 
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 
