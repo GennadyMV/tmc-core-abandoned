@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ZippedProjectTest {
+public class ZipTest {
 
     private Zip zip;
 
@@ -21,5 +21,20 @@ public class ZippedProjectTest {
         final byte[] bytes = { 1, 0, 1 };
         zip.setBytes(bytes);
         assertEquals(bytes, zip.getBytes());
+    }
+
+    @Test
+    public void settingBytesSetsLength() {
+
+        final byte[] bytes = { 1, 0, 1 };
+        zip.setBytes(bytes);
+        assertEquals(3, zip.length());
+    }
+
+    @Test
+    public void zeroLengthIfNoBytes() {
+
+        zip.setBytes(null);
+        assertEquals(0, zip.length());
     }
 }
