@@ -41,4 +41,9 @@ public class TaskMonitor {
 
         return progress;
     }
+
+    public int steps() {
+
+        return steps;
+    }
 }
