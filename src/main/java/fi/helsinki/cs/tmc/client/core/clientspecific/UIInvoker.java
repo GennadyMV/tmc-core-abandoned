@@ -9,16 +9,13 @@ public interface UIInvoker {
 
     /* Code review */
     void invokeCodeReviewRequestCreationSuccessWindow();
-
     void invokerCodeReviewRequestCreationFailureWindow();
 
 
     /* Testrunner */
     void invokeTestResultWindow(List<TestCaseResult> testCaseResults);
-
     void invokeTestsRunningWindow();
     void closeTestsRunningWindow();
-
     void invokeSubmitToServerWindow();
 
 

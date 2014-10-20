@@ -12,8 +12,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class CourseTest {
 
-    private static final String URL = "testUrl";
-
     private Course course;
 
     @Before
