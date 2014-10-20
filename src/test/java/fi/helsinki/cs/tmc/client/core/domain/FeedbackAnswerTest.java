@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-
 public class FeedbackAnswerTest {
 
     private FeedbackQuestion question;
@@ -54,5 +53,4 @@ public class FeedbackAnswerTest {
 
         assertEquals(question, answer.getQuestion());
     }
-
 }
