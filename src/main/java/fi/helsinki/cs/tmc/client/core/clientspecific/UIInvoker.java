@@ -2,6 +2,7 @@ package fi.helsinki.cs.tmc.client.core.clientspecific;
 
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 
+import java.io.File;
 import java.util.List;
 
 public interface UIInvoker {
@@ -18,4 +19,7 @@ public interface UIInvoker {
     void invokeSubmitToServerWindow();
     void invokerSomeTestsFailedLocallyWindow();
 
+
+    /* IDE Interactions */
+    boolean openProject(File projectRoot);
 }
