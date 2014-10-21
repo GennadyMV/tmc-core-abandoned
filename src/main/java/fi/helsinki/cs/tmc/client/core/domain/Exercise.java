@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -382,6 +383,11 @@ public class Exercise implements Serializable {
     public boolean isDownloadable() {
 
         return (!hasDeadlinePassed()) && (project == null || project.getStatus() != ProjectStatus.DOWNLOADED);
+    }
+
+    public String getProjectLocation() {
+
+        return courseName + File.separator + name.replace('/', '-');
     }
 
 }
