@@ -1,14 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import fi.helsinki.cs.tmc.client.core.io.unzip.decider.DefaultUnzippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.unzip.decider.MavenUnzippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.unzip.decider.UnzipAllTheThings;
-import fi.helsinki.cs.tmc.client.core.io.unzip.decider.UnzippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.DefaultZippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.MavenZippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZipAllTheThings;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZippingDecider;
-
 import java.util.List;
 
 /**
@@ -16,37 +7,21 @@ import java.util.List;
  */
 public enum ProjectType {
 
-    JAVA_ANT("build.xml", DefaultZippingDecider.class, DefaultUnzippingDecider.class),
-    JAVA_MAVEN("pom.xml", MavenZippingDecider.class, MavenUnzippingDecider.class),
-    MAKEFILE("Makefile", DefaultZippingDecider.class, DefaultUnzippingDecider.class),
-    NONE("\0", ZipAllTheThings.class, UnzipAllTheThings.class);
+    JAVA_ANT("build.xml"),
+    JAVA_MAVEN("pom.xml"),
+    MAKEFILE("Makefile"),
+    NONE("\0");
 
     private final String buildFile;
-    private final Class<? extends ZippingDecider> zippingDeciderClass;
-    private final Class<? extends UnzippingDecider> unzippingDeciderClass;
 
-    private ProjectType(final String buildFile,
-                        final Class<? extends ZippingDecider> zippingDeciderClass,
-                        final Class<? extends UnzippingDecider> unzippingDeciderClass) {
+    private ProjectType(final String buildFile) {
 
         this.buildFile = buildFile;
-        this.zippingDeciderClass = zippingDeciderClass;
-        this.unzippingDeciderClass = unzippingDeciderClass;
     }
 
     public String getBuildFile() {
 
         return buildFile;
-    }
-
-    public ZippingDecider getZippingDecider() throws InstantiationException, IllegalAccessException {
-
-        return zippingDeciderClass.newInstance();
-    }
-
-    public UnzippingDecider getUnzippingDecider() throws InstantiationException, IllegalAccessException {
-
-        return unzippingDeciderClass.newInstance();
     }
 
     /**

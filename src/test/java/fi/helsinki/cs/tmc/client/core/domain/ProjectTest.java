@@ -1,10 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import fi.helsinki.cs.tmc.client.core.exception.visible.InvalidProjectException;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.DefaultZippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.MavenZippingDecider;
-import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZipAllTheThings;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,34 +110,6 @@ public class ProjectTest {
 
         p = new Project(exercise, new ArrayList<String>());
         assertEquals("", p.getRootPath());
-    }
-
-    @Test
-    public void getZippingDeciderWhenMavenProjectTest() throws InvalidProjectException, InstantiationException, IllegalAccessException {
-
-        projectFiles.add("pom.xml");
-        assertTrue(project.getProjectType().getZippingDecider() instanceof MavenZippingDecider);
-    }
-
-    @Test
-    public void getZippingDeciderWhenAntProjectTest() throws InvalidProjectException, InstantiationException, IllegalAccessException {
-
-        projectFiles.add("build.xml");
-        assertTrue(project.getProjectType().getZippingDecider() instanceof DefaultZippingDecider);
-    }
-
-    @Test
-    public void getZippingDeciderWhenCProjectTest() throws InvalidProjectException, InstantiationException, IllegalAccessException {
-
-        projectFiles.add("Makefile");
-        assertTrue(project.getProjectType().getZippingDecider() instanceof DefaultZippingDecider);
-    }
-
-    @Test
-    public void getZippingDeciderWhenThereIsNoProjectTest() throws InvalidProjectException, InstantiationException, IllegalAccessException {
-
-        project.setProjectFiles(new ArrayList<String>());
-        assertTrue(project.getProjectType().getZippingDecider() instanceof ZipAllTheThings);
     }
 
     @Test
