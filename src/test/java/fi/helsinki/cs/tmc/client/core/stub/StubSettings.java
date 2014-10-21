@@ -25,7 +25,7 @@ public class StubSettings implements Settings {
                         final Course activeCourse,
                         final String password,
                         final String username,
-                        final File projectsroot) {
+                        final File projectsRoot) {
 
         super();
 
