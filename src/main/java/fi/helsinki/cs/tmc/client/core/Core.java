@@ -11,6 +11,8 @@ public final class Core {
     private static UIInvoker uiInvoker;
     private static Settings settings;
 
+    private Core() { }
+
     public static void initialize(final UIInvoker uiInvoker, final Settings settings) {
 
         Core.uiInvoker = uiInvoker;
