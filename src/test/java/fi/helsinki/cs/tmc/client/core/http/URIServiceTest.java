@@ -2,6 +2,7 @@ package fi.helsinki.cs.tmc.client.core.http;
 
 import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
+import fi.helsinki.cs.tmc.client.core.stub.StubSettings;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,85 +14,35 @@ import static org.junit.Assert.*;
 
 public class URIServiceTest {
 
-    private class SettingsStub implements Settings {
-
-        @Override
-        public String tmcServerBaseUrl() {
-
-            return "http://localhost:8089/hy";
-        }
-
-        @Override
-        public String tmcApiVersion() {
-
-            return "7";
-        }
-
-        @Override
-        public String clientId() {
-
-            return "Core";
-        }
-
-        @Override
-        public String clientVersion() {
-
-            return "1";
-        }
-
-        @Override
-        public Course activeCourse() {
-
-            final Course course = new Course();
-            course.setDetailsUrl("http://localhost:8089/hy/courses/1.json");
-            return course;
-        }
-
-        @Override
-        public String password() {
-
-            return "password";
-        }
-
-        @Override
-        public String username() {
-
-            return "username";
-        }
-
-    }
-
-
+    private URIService uriService;
     private Settings settings;
 
     @Before
     public void setUp() {
 
-        settings = new SettingsStub();
-    }
+        final Course course = new Course();
+        course.setDetailsUrl("http://localhost:8089/hy/courses/1.json");
 
-    @Test
-    public void canConstruct() {
-
-        new URIService();
+        settings = new StubSettings("http://localhost:8089", "7", "Core", "1", course, "password", "username", null);
+        uriService = new URIService(settings);
     }
 
     @Test
     public void returnsCorrectCourseListURI() throws URISyntaxException {
 
-        final URI uri = URIService.courseListURI(settings);
+        final URI uri = uriService.courseListURI();
 
         assertCorrectHostPortAndScheme(uri);
         assertCorrectParams(uri);
 
         System.out.println(uri.getPath());
-        assertTrue(uri.getPath().equals("/hy/courses.json"));
+        assertTrue(uri.getPath().equals("/courses.json"));
     }
 
     @Test
     public void returnsCorrectActiveCourseDetailsURI() throws URISyntaxException {
 
-        final URI uri = URIService.activeCourseDetailsURI(settings);
+        final URI uri = uriService.activeCourseDetailsURI();
 
         assertCorrectHostPortAndScheme(uri);
         assertCorrectParams(uri);

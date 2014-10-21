@@ -2,6 +2,8 @@ package fi.helsinki.cs.tmc.client.core.clientspecific;
 
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 
+import java.io.File;
+
 public interface Settings {
 
     String tmcServerBaseUrl();
@@ -17,5 +19,7 @@ public interface Settings {
     String password();
 
     String username();
+
+    File projectsRoot();
 
 }
