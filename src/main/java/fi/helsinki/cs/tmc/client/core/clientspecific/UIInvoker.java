@@ -21,5 +21,6 @@ public interface UIInvoker {
 
 
     /* IDE Interactions */
+    void userVisibleException(String string);
     boolean openProject(File projectRoot);
 }

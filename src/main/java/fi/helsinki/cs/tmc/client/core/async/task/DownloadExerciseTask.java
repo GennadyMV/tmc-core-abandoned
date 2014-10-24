@@ -10,7 +10,9 @@ import fi.helsinki.cs.tmc.client.core.domain.Exercise;
 import fi.helsinki.cs.tmc.client.core.domain.Zip;
 import fi.helsinki.cs.tmc.client.core.http.HttpClientFactory;
 import fi.helsinki.cs.tmc.client.core.http.HttpWorker;
+import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,30 +21,58 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class DownloadExerciseTask extends AbstractTask<Zip> {
+public class DownloadExerciseTask extends AbstractTask<File> {
 
     private static final String DESCRIPTION = "Retrieving course list";
     private static final Logger LOG = LogManager.getLogger();
 
     private Settings settings;
+    private Unzipper unzipper;
     private Exercise exercise;
 
-    public DownloadExerciseTask(final TaskListener listener, final Settings settings, final Exercise exercise) {
+    public DownloadExerciseTask(final TaskListener listener, final Settings settings, final Unzipper unzipper, final Exercise exercise) {
 
         super(DESCRIPTION, listener, new TaskMonitor(1));
 
         this.settings = settings;
+        this.unzipper = unzipper;
         this.exercise = exercise;
     }
 
     @Override
-    protected Zip work() throws InterruptedException, TaskFailureException {
+    protected File work() throws InterruptedException, TaskFailureException {
+
+        final HttpWorker http = buildHttpWorker();
+
+        checkForInterrupt();
+
+        final URI uri = buildExerciseDownloadURI();
+
+        checkForInterrupt();
+
+        final Zip zip = downloadZip(http, uri);
+
+        checkForInterrupt();
+
+        final File destinationFolder = new File(settings.projectsRoot(), exercise.getProjectLocation());
+
+        checkForInterrupt();
+
+        extractProject(zip, destinationFolder);
+
+        return destinationFolder;
+    }
+
+    private HttpWorker buildHttpWorker() {
 
         final CloseableHttpAsyncClient httpClient = HttpClientFactory.makeHttpClient();
         final ObjectMapper mapper = new ObjectMapper();
-        final HttpWorker http = new HttpWorker(mapper, httpClient);
+        final HttpWorker worker = new HttpWorker(mapper, httpClient);
 
-        checkForInterrupt();
+        return worker;
+    }
+
+    private URI buildExerciseDownloadURI() throws TaskFailureException {
 
         URI uri;
         try {
@@ -52,7 +82,10 @@ public class DownloadExerciseTask extends AbstractTask<Zip> {
             throw new TaskFailureException(exception);
         }
 
-        checkForInterrupt();
+        return uri;
+    }
+
+    private Zip downloadZip(final HttpWorker http, final URI uri) throws TaskFailureException {
 
         byte[] bytes;
         try {
@@ -62,14 +95,21 @@ public class DownloadExerciseTask extends AbstractTask<Zip> {
             throw new TaskFailureException(exception);
         }
 
-        checkForInterrupt();
-
         final Zip zip = new Zip();
         zip.setBytes(bytes);
 
         return zip;
     }
 
+    private void extractProject(final Zip zip, final File destinationFolder) throws TaskFailureException {
+
+        try {
+            unzipper.unzipProject(zip.getBytes(), destinationFolder, true);
+        } catch (IOException exception) {
+            LOG.error("Unable to extract zipped project", exception);
+            throw new TaskFailureException("Unable to extract zipped project", exception);
+        }
+    }
 
     @Override
     protected void cleanUp() { }
