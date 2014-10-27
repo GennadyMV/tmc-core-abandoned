@@ -1,5 +1,8 @@
 package fi.helsinki.cs.tmc.client.core.io.unzip;
 
+import fi.helsinki.cs.tmc.client.core.io.unzip.decider.NeverOverwritingDecider;
+import fi.helsinki.cs.tmc.client.core.io.unzip.decider.OverwritingDecider;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -20,31 +23,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class Unzipper {
-
-    public interface OverwritingDecider {
-
-        /**
-         * Decides whether the given relative path in the project may be overwritten.
-         *
-         * <p>
-         * Only called for files (not directories) whose content has changed.
-         *
-         * <p>
-         * Note that the given path has platform-specific directory separators.
-         */
-        boolean mayOverwrite(String relativePath);
-
-        /**
-         * Decides whether the given relative path in the project may be deleted.
-         *
-         * <p>
-         * Only called for files and directories that are on disk but not in the zip.
-         *
-         * <p>
-         * Note that the given path has platform-specific directory separators.
-         */
-        boolean mayDelete(String relativePath);
-    }
 
     /**
      * Information about the results of an unzip operation.
@@ -181,20 +159,7 @@ public class Unzipper {
         }
     }
 
-    private static OverwritingDecider neverAllowOverwrites = new OverwritingDecider() {
-
-        @Override
-        public boolean mayOverwrite(final String relativePath) {
-
-            return false;
-        }
-
-        @Override
-        public boolean mayDelete(final String relativePath) {
-
-            return false;
-        }
-    };
+    private static OverwritingDecider neverAllowOverwrites = new NeverOverwritingDecider();
 
     private OverwritingDecider overwriting;
 
