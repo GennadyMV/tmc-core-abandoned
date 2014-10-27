@@ -24,5 +24,5 @@ public interface OverwritingDecider {
      * Note that the given path has platform-specific directory separators.
      */
     boolean mayDelete(String relativePath);
-    
+
 }

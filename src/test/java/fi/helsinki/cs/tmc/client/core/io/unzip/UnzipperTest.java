@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.io.unzip;
 
 import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper.Result;
+import fi.helsinki.cs.tmc.client.core.io.unzip.decider.OverwritingDecider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,14 +12,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import static org.junit.Assert.*;
-
 import static org.mockito.Mockito.*;
 
 public class UnzipperTest {
@@ -123,7 +122,7 @@ public class UnzipperTest {
         final File expectedSameFile = new File(tempDir.getRoot() + "/dest/four.txt");
         FileUtils.write(expectedSameFile, "four");
 
-        final Unzipper.OverwritingDecider overwriting = mock(Unzipper.OverwritingDecider.class);
+        final OverwritingDecider overwriting = mock(OverwritingDecider.class);
         when(overwriting.mayOverwrite(FILE1_NAME)).thenReturn(false);
         when(overwriting.mayOverwrite(FILE2_NAME)).thenReturn(true);
 
@@ -169,7 +168,7 @@ public class UnzipperTest {
         final File expectedNotDeletedFile = new File(tempDir.getRoot() + "/dest/three.txt");
         FileUtils.write(expectedNotDeletedFile, "This should not be deleted");
 
-        final Unzipper.OverwritingDecider overwriting = mock(Unzipper.OverwritingDecider.class);
+        final OverwritingDecider overwriting = mock(OverwritingDecider.class);
         when(overwriting.mayDelete(FILE2_NAME)).thenReturn(true);
         when(overwriting.mayDelete(FILE3_NAME)).thenReturn(false);
 
@@ -210,7 +209,7 @@ public class UnzipperTest {
         final File expectedNotDeletedFile = new File(tempDir.getRoot() + "/dest/stuff/preserved/three.txt");
         FileUtils.write(expectedNotDeletedFile, "This should not be deleted");
 
-        final Unzipper.OverwritingDecider overwriting = mock(Unzipper.OverwritingDecider.class);
+        final OverwritingDecider overwriting = mock(OverwritingDecider.class);
         when(overwriting.mayDelete(GENERIC + fsep + DELETED + fsep + FILE2_NAME)).thenReturn(true);
         when(overwriting.mayDelete(GENERIC + fsep + DELETED)).thenReturn(true);
         when(overwriting.mayDelete(GENERIC + fsep + PRESERVED + fsep + FILE3_NAME)).thenReturn(false);
@@ -252,7 +251,7 @@ public class UnzipperTest {
         final File file3 = new File(tempDir.getRoot() + "/dest/stuff/three.txt");
         FileUtils.write(file3, "This would be deleted if not in dry run mode");
 
-        final Unzipper.OverwritingDecider overwriting = mock(Unzipper.OverwritingDecider.class);
+        final OverwritingDecider overwriting = mock(OverwritingDecider.class);
         when(overwriting.mayOverwrite(FILE1_NAME)).thenReturn(false);
         when(overwriting.mayOverwrite(FILE2_NAME)).thenReturn(true);
         when(overwriting.mayDelete(GENERIC + fsep + FILE3_NAME)).thenReturn(true);
