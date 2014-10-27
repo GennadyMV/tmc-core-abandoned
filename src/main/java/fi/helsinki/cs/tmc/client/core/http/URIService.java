@@ -1,6 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.http;
 
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,7 +20,7 @@ public class URIService {
 
     public URI courseListURI() throws URISyntaxException {
 
-        final URIBuilder builder = new URIBuilder(settings.tmcServerBaseUrl());
+        final URIBuilder builder = new URIBuilder(settings.getTmcServerBaseUrl());
         appendToPath(builder, TMC_API_COURSE_LIST_RELATIVE_URL);
         setTmcApiParams(builder);
 
@@ -29,16 +29,16 @@ public class URIService {
 
     public URI activeCourseDetailsURI() throws URISyntaxException {
 
-        final URIBuilder builder = new URIBuilder(settings.activeCourse().getDetailsUrl());
+        final URIBuilder builder = new URIBuilder(settings.getActiveCourse().getDetailsUrl());
         setTmcApiParams(builder);
 
         return builder.build();
     }
 
     private void setTmcApiParams(final URIBuilder builder) {
-        builder.addParameter("api_version", settings.tmcApiVersion());
-        builder.addParameter("client", settings.clientId());
-        builder.addParameter("client_version", settings.clientVersion());
+        builder.addParameter("api_version", settings.getTmcApiVersion());
+        builder.addParameter("client", settings.getClientId());
+        builder.addParameter("client_version", settings.getClientVersion());
     }
 
     private void appendToPath(final URIBuilder builder, final String appendedString) {

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Zip;
 import fi.helsinki.cs.tmc.client.core.http.HttpClientFactory;
 import fi.helsinki.cs.tmc.client.core.http.HttpWorker;
@@ -54,7 +54,7 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
         checkForInterrupt();
 
-        final File destinationFolder = new File(settings.projectsRoot(), exercise.getProjectLocation());
+        final File destinationFolder = new File(settings.getProjectsRoot(), exercise.getProjectLocation());
 
         checkForInterrupt();
 

@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
-import fi.helsinki.cs.tmc.client.core.stub.StubSettings;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 import fi.helsinki.cs.tmc.client.core.testutil.SimpleObject;
 
 import java.io.IOException;
@@ -245,16 +244,16 @@ public class HttpWorkerTest {
                 .willReturn(aResponse().withStatus(200).withBody(json)));
     }
 
-    private class CredSettings extends StubSettings {
+    private class CredSettings extends Settings {
 
         @Override
-        public String password() {
+        public String getPassword() {
 
             return HttpWorkerTest.PASS;
         }
 
         @Override
-        public String username() {
+        public String getUsername() {
 
             return HttpWorkerTest.USER;
         }

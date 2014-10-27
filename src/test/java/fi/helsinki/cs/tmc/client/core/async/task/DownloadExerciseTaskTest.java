@@ -5,11 +5,10 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper;
-import fi.helsinki.cs.tmc.client.core.stub.StubSettings;
 import fi.helsinki.cs.tmc.client.core.testutil.MockTMCServer;
 
 import java.io.File;
@@ -65,7 +64,7 @@ public class DownloadExerciseTaskTest {
         exercise.setCourse(course);
         exercise.setDownloadUrl("http://localhost:8089/exercises/1.zip");
 
-        settings = new StubSettings("http://localhost:8089/", "7", "Core", "1", course, "password", "username", projectsRoot.getRoot());
+        settings = new Settings("http://localhost:8089/", "7", "Core", "1", course, "password", "username", projectsRoot.getRoot());
 
         listener = mock(TaskListener.class);
 

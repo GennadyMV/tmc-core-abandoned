@@ -1,8 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.http;
 
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
-import fi.helsinki.cs.tmc.client.core.stub.StubSettings;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,7 +22,7 @@ public class URIServiceTest {
         final Course course = new Course();
         course.setDetailsUrl("http://localhost:8089/hy/courses/1.json");
 
-        settings = new StubSettings("http://localhost:8089", "7", "Core", "1", course, "password", "username", null);
+        settings = new Settings("http://localhost:8089", "7", "Core", "1", course, "password", "username", null);
         uriService = new URIService(settings);
     }
 

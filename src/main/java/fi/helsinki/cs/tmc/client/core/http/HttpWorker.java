@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
-import fi.helsinki.cs.tmc.client.core.clientspecific.Settings;
+import fi.helsinki.cs.tmc.client.core.domain.Settings;
 
 import java.net.URI;
 
@@ -92,7 +92,7 @@ public class HttpWorker {
 
     public HttpWorker withCredentials(final Settings settings) {
 
-        this.credentials = new UsernamePasswordCredentials(settings.username(), settings.password());
+        this.credentials = new UsernamePasswordCredentials(settings.getUsername(), settings.getPassword());
 
         return this;
     }
