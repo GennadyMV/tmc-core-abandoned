@@ -28,9 +28,9 @@ public class Course {
     public Course(final String name) {
 
         this.name = name;
-        exercises = new ArrayList<Exercise>();
-        unlockables = new ArrayList<String>();
-        spywareUrls = new ArrayList<String>();
+        this.exercises = new ArrayList<>();
+        this.unlockables = new ArrayList<>();
+        this.spywareUrls = new ArrayList<>();
     }
 
     public int getId() {
@@ -121,32 +121,6 @@ public class Course {
     public void setUnlockables(final List<String> unlockables) {
 
         this.unlockables = unlockables;
-    }
-
-    public List<Exercise> getDownloadableExercises() {
-
-        final List<Exercise> downloadableExercises = new ArrayList<Exercise>();
-
-        for (final Exercise e : getExercises()) {
-            if ((e.isDownloadable() || e.shouldBeUpdated()) && !e.isCompleted()) {
-                downloadableExercises.add(e);
-            }
-        }
-
-        return downloadableExercises;
-    }
-
-    public List<Exercise> getCompletedDownloadableExercises() {
-
-        final List<Exercise> completedExercises = new ArrayList<Exercise>();
-
-        for (final Exercise e : getExercises()) {
-            if ((e.isDownloadable() || e.shouldBeUpdated()) && e.isCompleted()) {
-                completedExercises.add(e);
-            }
-        }
-
-        return completedExercises;
     }
 
     public List<Exercise> getExercises() {
