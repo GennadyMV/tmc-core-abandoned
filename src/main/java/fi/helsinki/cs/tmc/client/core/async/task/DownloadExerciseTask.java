@@ -54,13 +54,7 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
         checkForInterrupt();
 
-        final File destinationFolder = new File(settings.getProjectsRoot(), exercise.getProjectLocation());
-
-        checkForInterrupt();
-
-        extractProject(zip, destinationFolder);
-
-        return destinationFolder;
+        return extractProject(zip);
     }
 
     private HttpWorker buildHttpWorker() {
@@ -101,7 +95,10 @@ public class DownloadExerciseTask extends AbstractTask<File> {
         return zip;
     }
 
-    private void extractProject(final Zip zip, final File destinationFolder) throws TaskFailureException {
+    private File extractProject(final Zip zip) throws TaskFailureException {
+
+        final String projectLocation = exercise.getCourseName() + File.separator + exercise.getName();
+        final File destinationFolder = new File(settings.getProjectsRoot(), projectLocation);
 
         try {
             unzipper.unzipProject(zip.getBytes(), destinationFolder, true);
@@ -109,6 +106,8 @@ public class DownloadExerciseTask extends AbstractTask<File> {
             LOG.error("Unable to extract zipped project", exception);
             throw new TaskFailureException("Unable to extract zipped project", exception);
         }
+
+        return destinationFolder;
     }
 
     @Override
