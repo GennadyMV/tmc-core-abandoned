@@ -1,14 +1,12 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class CourseTest {
 
@@ -119,72 +117,65 @@ public class CourseTest {
     }
 
     @Test
-    public void getDownloadableExercisesDownloadsAll() {
+    public void hashcodeIsSameForTwoCoursesWithSameName() {
 
-        final Exercise ex1 = new Exercise();
-        final Exercise ex2 = new Exercise();
-        final Exercise ex3 = new Exercise();
+        course.setName("name");
+        final Course other = new Course("name");
 
-        final List<Exercise> exList = new ArrayList<>();
-
-        exList.add(ex1);
-        exList.add(ex2);
-        exList.add(ex3);
-
-        course.setExercises(exList);
-
-        assertEquals(course.getDownloadableExercises().size(), 3);
+        assertEquals(course.hashCode(), other.hashCode());
     }
 
     @Test
-    public void getDownloadableExercisesDownloadsOnlyDownloadable() {
+    public void hashcodeIsSameForTwoCoursesWithNullName() {
 
-        final Exercise ex1 = new Exercise();
-        final Exercise ex2 = new Exercise();
-        final Exercise ex3 = new Exercise();
-
-        final Date d = new Date();
-
-        d.setTime(0);
-
-        ex1.setDeadline(d);
-
-        final List<Exercise> exList = new ArrayList<>();
-
-        exList.add(ex1);
-        exList.add(ex2);
-        exList.add(ex3);
-
-        course.setExercises(exList);
-
-        assertEquals(course.getDownloadableExercises().size(), 2);
+        assertEquals(new Course(null).hashCode(), new Course(null).hashCode());
     }
 
     @Test
-    public void getDownloadableExercisesDownloadsOnlyDownloadableAndUpdatedAndNotComplete() {
+    public void isEqualToItself() {
 
-        final Exercise ex1 = new Exercise();
-        final Exercise ex2 = new Exercise();
-        final Exercise ex3 = new Exercise();
+        assertTrue(course.equals(course));
+    }
 
-        final Date d = new Date();
+    @Test
+    public void isNotEqualToNull() {
 
-        d.setTime(0);
+        assertFalse(course.equals(null));
+    }
 
-        ex1.setDeadline(d);
-        ex2.setDeadline(d);
-        ex2.setUpdateAvailable(true);
-        ex3.setDeadline(d);
-        ex3.setCompleted(true);
+    @Test
+    public void isNotEqualToInstanceOfAnotherClass() {
 
-        final List<Exercise> exList = new ArrayList<>();
+        assertFalse(course.equals(1L));
+    }
 
-        exList.add(ex1);
-        exList.add(ex2);
-        exList.add(ex3);
+    @Test
+    public void isEqualToCourseWithSameName() {
 
-        course.setExercises(exList);
+        course.setName("name1");
+        final Course other = new Course("name1");
 
-        assertEquals(course.getDownloadableExercises().size(), 1);
+        assertEquals(course, other);
+    }
+
+    @Test
+    public void twoCoursesWithNullNameAreEqual() {
+
+        assertTrue(new Course(null).equals(new Course(null)));
+    }
+
+    @Test
+    public void isNotEqualToCourseWithDifferentName() {
+
+        course.setName("name2");
+        final Course other = new Course("name3");
+
+        assertFalse(course.equals(other));
+    }
+
+    @Test
+    public void courseWithNullNameIsNotEqualToCourseWithNonNullName() {
+
+        assertFalse(new Course(null).equals(new Course("name5")));
     }
 }
