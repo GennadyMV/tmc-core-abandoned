@@ -1,17 +1,12 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ExerciseTest {
 
@@ -38,7 +33,7 @@ public class ExerciseTest {
         assertEquals("test course name", exercise.getCourseName());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void setNameThrowsIfParameterIsNull() {
 
         exercise.setName(null);
@@ -57,7 +52,7 @@ public class ExerciseTest {
         assertEquals("name 01", exercise.getName());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void hasDeadlinePassedAtThrowsIfParameterIsNull() {
 
         exercise.hasDeadlinePassedAt(null);
@@ -66,29 +61,21 @@ public class ExerciseTest {
     @Test
     public void hasDeadlinePassedAtReturnsTrueIfDeadlineHasPassed() {
 
-        setPassedDeadline();
-        assertTrue(exercise.hasDeadlinePassedAt(new Date()));
-    }
-
-    private void setPassedDeadline() {
-
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         exercise.setDeadline(cal.getTime());
+
+        assertTrue(exercise.hasDeadlinePassedAt(new Date()));
     }
 
     @Test
     public void hasDeadlinePassedAtReturnsFalseIfDeadlineHasNotPassed() {
 
-        setNonPassedDeadline();
-        assertFalse(exercise.hasDeadlinePassedAt(new Date()));
-    }
-
-    private void setNonPassedDeadline() {
-
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, +1);
         exercise.setDeadline(cal.getTime());
+
+        assertFalse(exercise.hasDeadlinePassedAt(new Date()));
     }
 
     @Test
@@ -105,7 +92,7 @@ public class ExerciseTest {
         assertFalse(exercise.hasDeadlinePassedAt(date));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void setDownloadUrlThrowsIfParameterIsNull() {
 
         exercise.setDownloadUrl(null);
@@ -124,7 +111,7 @@ public class ExerciseTest {
         assertEquals("url 01", exercise.getDownloadUrl());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void setReturnUrlThrowsIfParameterIsNull() {
 
         exercise.setReturnUrl(null);
@@ -141,60 +128,6 @@ public class ExerciseTest {
 
         exercise.setReturnUrl("url 01");
         assertEquals("url 01", exercise.getReturnUrl());
-    }
-
-    @Test
-    public void isReturnableReturnsTrueIfIsReturnableAndDeadlineHasNotPassed() {
-
-        setNonPassedDeadline();
-        exercise.setReturnable(true);
-        assertTrue(exercise.isReturnable());
-    }
-
-    @Test
-    public void isReturnableReturnsFalseIfIsReturnableAndDeadlineHasPassed() {
-
-        setPassedDeadline();
-        exercise.setReturnable(true);
-        assertFalse(exercise.isReturnable());
-    }
-
-    @Test
-    public void isReturnableReturnsFalseIfIsNotReturnableAndDeadlineHasNotPassed() {
-
-        setNonPassedDeadline();
-        exercise.setReturnable(false);
-        assertFalse(exercise.isReturnable());
-    }
-
-    @Test
-    public void isReturnableReturnsFalseIfIsNotReturnableAndDeadlineHasPassed() {
-
-        setPassedDeadline();
-        exercise.setReturnable(false);
-        assertFalse(exercise.isReturnable());
-    }
-
-    @Test
-    public void deadlineIsNonNullAfterCallingFinalizeDeSerialization() {
-
-        exercise.setDeadlineString("2012-03-20T20:34:00+0200");
-        exercise.finalizeDeserialization();
-        assertNotNull(exercise.getDeadline());
-    }
-
-    @Test
-    public void deadlineIsNullAfterCallingFinalizeDeSerialization() {
-
-        exercise.setDeadlineString("2012-03-20T20:34:00+0200");
-        assertNull(exercise.getDeadline());
-    }
-
-    @Test
-    public void deadlineIsNullAfterCallingFinalizeDeSerializationAndStringIsEmpty() {
-
-        exercise.setDeadlineString("");
-        assertNull(exercise.getDeadline());
     }
 
     @Test
@@ -219,14 +152,11 @@ public class ExerciseTest {
     }
 
     @Test
-    public void testExerciseKey() {
+    public void testDeadline() {
 
-        exercise.setName("name");
-        exercise.setCourseName("course");
-
-        final ExerciseKey ek = exercise.getKey();
-        assertEquals(exercise.getCourseName(), ek.getCourseName());
-        assertEquals(exercise.getName(), ek.getExerciseName());
+        final Date date = Calendar.getInstance().getTime();
+        exercise.setDeadline(date);
+        assertEquals(date, exercise.getDeadline());
     }
 
     @Test
@@ -246,8 +176,9 @@ public class ExerciseTest {
     @Test
     public void testSolutionDownloadUrl() {
 
-        exercise.setSolutionDownloadUrl("url");
-        assertEquals("url", exercise.getSolutionDownloadUrl());
+
+        exercise.setSolutionUrl("url");
+        assertEquals("url", exercise.getSolutionUrl());
     }
 
     @Test
@@ -307,42 +238,64 @@ public class ExerciseTest {
     }
 
     @Test
-    public void finalizeDeserializationDoesNotTouchDeadlineDateIfStringIsNull() {
+    public void testSubmissionUrl() {
 
-        exercise.finalizeDeserialization();
-        assertNull(exercise.getDeadline());
+        exercise.setSubmissionsUrl("submissionurl");
+        assertEquals("submissionurl", exercise.getSubmissionsUrl());
     }
 
     @Test
-    public void finalizeDeserializationDoesNotTouchDeadlineDateIfStringIsEmpty() throws NoSuchFieldException, IllegalAccessException {
+    public void testReturnable() {
 
-        // Not optimal but works
-        final Field field = Exercise.class.getDeclaredField("deadlineString");
-        field.setAccessible(true);
-        field.set(exercise, "");
-
-        exercise.finalizeDeserialization();
-        assertNull(exercise.getDeadline());
-
+        exercise.setReturnable(true);
+        assertTrue(exercise.isReturnable());
     }
 
     @Test
-    public void isUpdatedReturnsTrueWithDifferentChecksums() {
+    public void testRuntimeParams() {
 
-        exercise.setChecksum("a");
+        final String[] params = new String[] { "param1" };
+        exercise.setRuntimeParams(params);
+
+        assertArrayEquals(params, exercise.getRuntimeParams());
+    }
+
+    @Test
+    public void testRuntimeParamsReturnsEmptyArrayIfNotSet() {
+
+        assertEquals(0, exercise.getRuntimeParams().length);
+    }
+
+    @Test
+    public void testValgrindStrategy() {
+
+        exercise.setValgrindStrategy(ValgrindStrategy.FAIL);
+
+        assertEquals(ValgrindStrategy.FAIL, exercise.getValgrindStrategy());
+    }
+
+    @Test
+    public void testCourse() {
+
+        final Course course = new Course();
+        exercise.setCourse(course);
+
+        assertEquals(course, exercise.getCourse());
+    }
+
+    @Test
+    public void testProject() {
+
+        final Project project = new Project(new Exercise());
+        exercise.setProject(project);
+
+        assertEquals(project, exercise.getProject());
+    }
+
+    @Test
+    public void testUpdateAvailable() {
+
         exercise.setUpdateAvailable(true);
-        exercise.setOldChecksum("b");
-        assertTrue(exercise.shouldBeUpdated());
-        exercise.setOldChecksum("a");
-        assertTrue(exercise.shouldBeUpdated());
+        assertTrue(exercise.isUpdateAvailable());
     }
-
-    @Test
-    public void isUpdatedReturnsFalseWithSameChecksums() {
-
-        exercise.setChecksum("a");
-        exercise.setOldChecksum("a");
-        assertFalse(exercise.shouldBeUpdated());
-    }
-
 }

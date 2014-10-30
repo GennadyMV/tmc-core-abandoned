@@ -1,42 +1,43 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
-import java.io.File;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * A domain class for storing necessary data for a single TMC exercise, such as
- * its deadline, name and various URLs.
- */
 public class Exercise implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssX";
 
+    /* From JSON */
     private int id;
     private String name;
-    private transient Course course;
-    private String courseName;
-    private Date deadlineDate;
-    private String deadlineString;
-    private String downloadUrl;
-    private String solutionDownloadUrl;
-    private String returnUrl;
-    private boolean locked;
+    private String checksum;
+
     private String deadlineDescription;
+    private Date deadline;
+
+    private String returnUrl;
+    private String downloadUrl;
+    private String solutionUrl;
+    private String submissionsUrl;
+
+    private boolean locked;
     private boolean returnable;
     private boolean requiresReview;
     private boolean attempted;
     private boolean completed;
     private boolean reviewed;
     private boolean allReviewPointsGiven;
-    private String oldChecksum;
-    private boolean updateAvailable;
-    private String checksum;
-    private transient Project project;
+
     private Integer memoryLimit;
+    private String[] runtimeParams;
+    private ValgrindStrategy valgrindStrategy;
+
+    /* Local only */
+    private transient Course course;
+    private transient Project project;
+
+    private String courseName;
+    private boolean updateAvailable;
 
     public Exercise() { }
 
@@ -49,36 +50,6 @@ public class Exercise implements Serializable {
 
         this.name = name;
         this.courseName = courseName;
-    }
-
-    /**
-     * This method exists because the API used by the original TMC-plugin was
-     * deprecated. Originally Date's constructor accepted strings that contained
-     * date and it parsed them. This functionality has now been split to
-     * SimpleDateFormat class. As GSON uses reflection when deserializing
-     * objects, we can store the date string but we can't create Date object
-     * from it. Therefore we deserialize the date to separate string and then
-     * call this method to create Date-object from the string
-     */
-    public void finalizeDeserialization() {
-
-        if (deadlineString == null || deadlineString.equals("")) {
-            return;
-        }
-
-        final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        try {
-            deadlineDate = sdf.parse(deadlineString);
-        } catch (final ParseException e) {
-            // Set to null on failure
-            // TODO: Log here?
-            deadlineDate = null;
-        }
-    }
-
-    public void setDeadlineString(final String deadline) {
-
-        deadlineString = deadline;
     }
 
     public int getId() {
@@ -98,23 +69,18 @@ public class Exercise implements Serializable {
 
     public void setName(final String name) {
 
-        if (name == null) {
-            throw new NullPointerException("name was null at Exercise.setName");
-        }
-        if (name.isEmpty()) {
-            throw new IllegalArgumentException("Name cannot be empty at Exercise.setName");
-        }
+        assertNotNullOrEmpty(name, "name");
         this.name = name;
     }
 
-    public boolean isLocked() {
+    public String getChecksum() {
 
-        return locked;
+        return checksum;
     }
 
-    public void setLocked(final boolean locked) {
+    public void setChecksum(final String checksum) {
 
-        this.locked = locked;
+        this.checksum = checksum;
     }
 
     public String getDeadlineDescription() {
@@ -127,63 +93,14 @@ public class Exercise implements Serializable {
         this.deadlineDescription = deadlineDescription;
     }
 
-    public boolean hasDeadlinePassed() {
+    public Date getDeadline() {
 
-        return hasDeadlinePassedAt(new Date());
+        return deadline;
     }
 
-    public boolean hasDeadlinePassedAt(final Date time) {
+    public void setDeadline(final Date deadline) {
 
-        if (time == null) {
-            throw new NullPointerException("Given time was null at Exercise.isDeadlineEnded");
-        }
-        if (getDeadline() != null) {
-            return getDeadline().getTime() < time.getTime();
-        } else {
-            return false;
-        }
-    }
-
-    public ExerciseKey getKey() {
-
-        return new ExerciseKey(courseName, name);
-    }
-
-    public Course getCourse() {
-
-        return course;
-    }
-
-    public void setCourse(final Course course) {
-
-        this.course = course;
-    }
-
-    public String getCourseName() {
-
-        return courseName;
-    }
-
-    public void setCourseName(final String courseName) {
-
-        this.courseName = courseName;
-    }
-
-    public String getDownloadUrl() {
-
-        return downloadUrl;
-    }
-
-    public void setDownloadUrl(final String downloadAddress) {
-
-        if (downloadAddress == null) {
-            throw new NullPointerException("downloadAddress was null at Exercise.setDownloadAddress");
-        }
-        if (downloadAddress.isEmpty()) {
-            throw new IllegalArgumentException("downloadAddress cannot be empty at Exercise.setDownloadAddress");
-        }
-
-        downloadUrl = downloadAddress;
+        this.deadline = deadline;
     }
 
     public String getReturnUrl() {
@@ -191,42 +108,56 @@ public class Exercise implements Serializable {
         return returnUrl;
     }
 
-    public void setSolutionDownloadUrl(final String solutionDownloadUrl) {
+    public void setReturnUrl(final String returnUrl) {
 
-        this.solutionDownloadUrl = solutionDownloadUrl;
+        assertNotNullOrEmpty(returnUrl, "returnUrl");
+        this.returnUrl = returnUrl;
     }
 
-    public String getSolutionDownloadUrl() {
+    public String getDownloadUrl() {
 
-        return solutionDownloadUrl;
+        return downloadUrl;
     }
 
-    public void setReturnUrl(final String returnAddress) {
+    public void setDownloadUrl(final String downloadUrl) {
 
-        if (returnAddress == null) {
-            throw new NullPointerException("returnAddress was null at Exercise.setReturnAddress");
-        }
-
-        if (returnAddress.isEmpty()) {
-            throw new IllegalArgumentException("downloadAddress cannot be empty at Exercise.setReturnAddress");
-        }
-
-        returnUrl = returnAddress;
+        assertNotNullOrEmpty(downloadUrl, "downloadUrl");
+        this.downloadUrl = downloadUrl;
     }
 
-    public Date getDeadline() {
+    public String getSolutionUrl() {
 
-        return deadlineDate;
+        return solutionUrl;
     }
 
-    public void setDeadline(final Date deadline) {
+    public void setSolutionUrl(final String solutionUrl) {
 
-        deadlineDate = deadline;
+        this.solutionUrl = solutionUrl;
+    }
+
+    public String getSubmissionsUrl() {
+
+        return submissionsUrl;
+    }
+
+    public void setSubmissionsUrl(final String submissionsUrl) {
+
+        this.submissionsUrl = submissionsUrl;
+    }
+
+    public boolean isLocked() {
+
+        return locked;
+    }
+
+    public void setLocked(final boolean locked) {
+
+        this.locked = locked;
     }
 
     public boolean isReturnable() {
 
-        return returnable && !hasDeadlinePassed();
+        return returnable;
     }
 
     public void setReturnable(final boolean returnable) {
@@ -284,26 +215,6 @@ public class Exercise implements Serializable {
         this.allReviewPointsGiven = allReviewPointsGiven;
     }
 
-    public String getChecksum() {
-
-        return checksum;
-    }
-
-    public void setChecksum(final String checksum) {
-
-        this.checksum = checksum;
-    }
-
-    public void setOldChecksum(final String oldChecksum) {
-
-        this.oldChecksum = oldChecksum;
-    }
-
-    public String getOldChecksum() {
-
-        return oldChecksum;
-    }
-
     public Integer getMemoryLimit() {
 
         return memoryLimit;
@@ -314,36 +225,34 @@ public class Exercise implements Serializable {
         this.memoryLimit = memoryLimit;
     }
 
-    @Override
-    public String toString() {
+    public String[] getRuntimeParams() {
 
-        return name;
+        return runtimeParams != null ? runtimeParams : new String[0];
     }
 
-    @Override
-    public boolean equals(final Object o) {
+    public void setRuntimeParams(final String[] runtimeParams) {
 
-        if (o == null || !(o instanceof Exercise)) {
-            return false;
-        }
-
-        final Exercise e = (Exercise) o;
-
-        if (courseName == null || e.courseName == null) {
-            return false;
-        }
-
-        if (name == null || e.name == null) {
-            return false;
-        }
-
-        return courseName.equals(e.courseName) && name.equals(e.name);
+        this.runtimeParams = runtimeParams;
     }
 
-    @Override
-    public int hashCode() {
+    public ValgrindStrategy getValgrindStrategy() {
 
-        return courseName.hashCode() + 7 * name.hashCode();
+        return valgrindStrategy;
+    }
+
+    public void setValgrindStrategy(final ValgrindStrategy valgrindStrategy) {
+
+        this.valgrindStrategy = valgrindStrategy;
+    }
+
+    public Course getCourse() {
+
+        return course;
+    }
+
+    public void setCourse(final Course course) {
+
+        this.course = course;
     }
 
     public Project getProject() {
@@ -356,9 +265,14 @@ public class Exercise implements Serializable {
         this.project = project;
     }
 
-    public void setUpdateAvailable(final boolean updateAvailable) {
+    public String getCourseName() {
 
-        this.updateAvailable = updateAvailable;
+        return courseName;
+    }
+
+    public void setCourseName(final String courseName) {
+
+        this.courseName = courseName;
     }
 
     public boolean isUpdateAvailable() {
@@ -366,28 +280,35 @@ public class Exercise implements Serializable {
         return updateAvailable;
     }
 
-    public boolean shouldBeUpdated() {
+    public void setUpdateAvailable(final boolean updateAvailable) {
 
-        if (!updateAvailable) {
-            if (oldChecksum == null || oldChecksum.equals(checksum)) {
-                return false;
-            } else {
-                setUpdateAvailable(true);
-                return true;
-            }
+        this.updateAvailable = updateAvailable;
+    }
+
+    public boolean hasDeadlinePassedAt(final Date time) {
+        if (time == null) {
+            throw new IllegalArgumentException("Unable to compare against a null time");
         }
 
-        return true;
+        if (deadline == null) {
+            return false;
+        }
+
+        return deadline.before(time);
     }
 
-    public boolean isDownloadable() {
+    private void assertNotNullOrEmpty(final String string, final String argumentName) {
 
-        return (!hasDeadlinePassed()) && (project == null || project.getStatus() != ProjectStatus.DOWNLOADED);
+        if (string == null) {
+            throw new IllegalArgumentException("Argument " + argumentName + " can not be null");
+        } else if (string.isEmpty()) {
+            throw new IllegalArgumentException("Argument " + argumentName + " can not be empty");
+        }
     }
 
-    public String getProjectLocation() {
+    @Override
+    public String toString() {
 
-        return courseName + File.separator + name.replace('/', '-');
+        return name;
     }
-
 }
