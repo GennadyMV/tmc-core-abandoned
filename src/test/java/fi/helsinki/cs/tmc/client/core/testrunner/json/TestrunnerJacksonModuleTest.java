@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-public class JacksonStackTraceElementModuleTest {
+public class TestrunnerJacksonModuleTest {
 
     private ObjectMapper mapper;
 
@@ -18,7 +18,7 @@ public class JacksonStackTraceElementModuleTest {
     public void setUp() throws Exception {
 
         mapper = new ObjectMapper();
-        mapper.registerModule(new JacksonStackTraceElementModule());
+        mapper.registerModule(new TestrunnerJacksonModule());
     }
 
     @Test
