@@ -1,40 +1,40 @@
 package fi.helsinki.cs.tmc.client.core.io.reader;
 
 import fi.helsinki.cs.tmc.client.core.domain.TmcProjectFile;
-import fi.helsinki.cs.tmc.client.core.io.FileIO;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.yaml.snakeyaml.Yaml;
 
 public class TmcProjectFileReader {
 
-    private static final Logger LOG = Logger.getLogger(TmcProjectFile.class.getName());
+    private static final Logger LOG = LogManager.getLogger();
 
-    public static TmcProjectFile read(final FileIO file) {
+    public TmcProjectFile read(final File file) {
 
         final TmcProjectFile projectFile = new TmcProjectFile();
 
-        load(projectFile, file);
+        if (!file.exists()) {
+            return projectFile;
+        }
 
-        return projectFile;
-    }
-
-    private static void load(final TmcProjectFile projectFile, final FileIO file) {
-
-        if (!file.fileExists()) {
-            return;
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException("Provided file is a directory: " + file.getAbsolutePath());
         }
 
         try {
 
-            final Reader reader = file.getReader();
+            final Reader reader = new BufferedReader(new FileReader(file));
             try {
 
                 final Object root = new Yaml().load(reader);
@@ -47,12 +47,14 @@ public class TmcProjectFileReader {
             } finally {
                 reader.close();
             }
-        } catch (final IOException e) {
-            LOG.log(Level.WARNING, "Failed to read {0}: {1}", new Object[] { file.getPath(), e.getMessage() });
+        } catch (final IOException exception) {
+            LOG.warn("Failed to read " + file.getPath(), exception);
         }
+
+        return projectFile;
     }
 
-    private static List<String> parse(final Object root) {
+    private List<String> parse(final Object root) {
 
         if (!(root instanceof Map)) {
             return null;
