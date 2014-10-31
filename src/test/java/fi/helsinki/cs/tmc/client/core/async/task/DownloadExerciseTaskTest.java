@@ -83,12 +83,6 @@ public class DownloadExerciseTaskTest {
         task = new DownloadExerciseTask(new TaskListener() {
 
             @Override
-            public void onStart() { }
-
-            @Override
-            public void onEnd(final TaskResult<? extends Object> result) { }
-
-            @Override
             public void onSuccess(final TaskResult<? extends Object> result) {
 
                 final File root = (File) result.result();
@@ -131,12 +125,6 @@ public class DownloadExerciseTaskTest {
         task = new DownloadExerciseTask(new TaskListener() {
 
             @Override
-            public void onStart() { }
-
-            @Override
-            public void onEnd(final TaskResult<? extends Object> result) { }
-
-            @Override
             public void onSuccess(final TaskResult<? extends Object> result) {
 
                 org.junit.Assert.fail("Request should fail");
@@ -165,12 +153,6 @@ public class DownloadExerciseTaskTest {
                             .withStatus(500)));
 
         task = new DownloadExerciseTask(new TaskListener() {
-
-            @Override
-            public void onStart() { }
-
-            @Override
-            public void onEnd(final TaskResult<? extends Object> result) { }
 
             @Override
             public void onSuccess(final TaskResult<? extends Object> result) {
@@ -205,12 +187,6 @@ public class DownloadExerciseTaskTest {
         when(unzipper.unzipProject(any(byte[].class), any(File.class), eq(true))).thenThrow(new IOException());
 
         task = new DownloadExerciseTask(new TaskListener() {
-
-            @Override
-            public void onStart() { }
-
-            @Override
-            public void onEnd(final TaskResult<? extends Object> result) { }
 
             @Override
             public void onSuccess(final TaskResult<? extends Object> result) {

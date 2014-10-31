@@ -15,9 +15,7 @@ public class TestCaseResult {
     private String message;
     private CaughtException exception;
 
-    public TestCaseResult() {
-
-    }
+    public TestCaseResult() { }
 
     public TestCaseResult(final String name, final boolean successful, final String message) {
 

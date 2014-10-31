@@ -25,18 +25,6 @@ public class DownloadExerciseTaskListenerTest {
     }
 
     @Test
-    public void canCallOnStart() {
-
-        listener.onStart();
-    }
-
-    @Test
-    public void canCallOnEnd() {
-
-        listener.onEnd(null);
-    }
-
-    @Test
     public void canCallOnInterrupt() {
 
         listener.onInterrupt(null);

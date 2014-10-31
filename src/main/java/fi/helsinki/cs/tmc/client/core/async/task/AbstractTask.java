@@ -2,9 +2,12 @@ package fi.helsinki.cs.tmc.client.core.async.task;
 
 import fi.helsinki.cs.tmc.client.core.async.Task;
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
-import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
+import fi.helsinki.cs.tmc.client.core.async.TaskProgressListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,20 +18,33 @@ public abstract class AbstractTask<S> implements Task<S> {
 
     private String description;
     private TaskListener listener;
-    private TaskMonitor monitor;
+    private List<TaskProgressListener> progressListeners;
 
-    public AbstractTask(final String description, final TaskListener listener, final TaskMonitor taskProgressMonitor) {
+    public AbstractTask(final String description, final TaskListener listener) {
 
         this.description = description;
         this.listener = listener;
-        this.monitor = taskProgressMonitor;
+        this.progressListeners = new ArrayList<>();
+    }
+
+    @Override
+    public void addProgressListener(final TaskProgressListener progressListener) {
+
+        progressListeners.add(progressListener);
+    }
+
+    @Override
+    public boolean removeProgressListener(final TaskProgressListener progressListener) {
+
+        return progressListeners.remove(progressListener);
     }
 
     @Override
     public void run() {
 
-        monitor.start();
-        listener.onStart();
+        for (TaskProgressListener progressListener : progressListeners) {
+            progressListener.onStart();
+        }
 
         TaskResult<S> result;
         try {
@@ -59,19 +75,15 @@ public abstract class AbstractTask<S> implements Task<S> {
 
         }
 
-        listener.onEnd(result);
+        for (TaskProgressListener progressListener : progressListeners) {
+            progressListener.onEnd();
+        }
     }
 
     @Override
     public String getDescription() {
 
         return description;
-    }
-
-    @Override
-    public TaskMonitor getMonitor() {
-
-        return monitor;
     }
 
     protected abstract S work() throws InterruptedException, TaskFailureException;
@@ -82,6 +94,13 @@ public abstract class AbstractTask<S> implements Task<S> {
 
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedException("Task interrupted from outside");
+        }
+    }
+
+    protected void setProgress(final int current, final int estimatedTotal) {
+
+        for (TaskProgressListener progressListener : progressListeners) {
+            progressListener.onProgress(current, estimatedTotal);
         }
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class TestrunnerListenerTest {
@@ -39,14 +38,6 @@ public class TestrunnerListenerTest {
         }
 
         return new TestRunResult(caseResults);
-    }
-
-    @Test
-    public void onStartInvokesTestsRunningWindows() {
-
-        listener.onStart();
-        verify(invoker).invokeTestsRunningWindow();
-        verifyNoMoreInteractions(invoker);
     }
 
     @Test
@@ -84,12 +75,4 @@ public class TestrunnerListenerTest {
         listener.onSuccess(taskResult);
         verify(invoker).invokeSubmitToServerWindow();
     }
-
-    @Test
-    public void onEndDoesNothing() {
-
-        listener.onEnd(taskResult);
-        verifyNoMoreInteractions(invoker);
-    }
-
 }

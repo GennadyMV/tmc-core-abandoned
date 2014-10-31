@@ -1,7 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.testrunner.maven;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
-import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
 import fi.helsinki.cs.tmc.client.core.async.task.AbstractTask;
 import fi.helsinki.cs.tmc.client.core.clientspecific.MavenRunner;
@@ -30,7 +29,7 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
 
     public MavenTestrunnerTask(final TaskListener listener, final Project project, final MavenRunner mavenRunner, final TestResultFileReader resultFileReader) {
 
-        super(DESCRIPTION, listener, new TaskMonitor(3));
+        super(DESCRIPTION, listener);
 
         this.project = project;
         this.mavenRunner = mavenRunner;
@@ -40,11 +39,22 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
     @Override
     public TestRunResult work() throws TaskFailureException, InterruptedException {
 
+        setProgress(0, 3);
+
         compile();
+
+        checkForInterrupt();
+        setProgress(1, 3);
 
         test();
 
+        checkForInterrupt();
+        setProgress(2, 3);
+
         final TestRunResult result = parseResult();
+
+        checkForInterrupt();
+        setProgress(3, 3);
 
         return result;
     }
@@ -56,10 +66,6 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
         if (result != MAVEN_SUCCESS) {
             throw new TaskFailureException("Unable to compile project");
         }
-
-        getMonitor().increment();
-
-        checkForInterrupt();
     }
 
     private void test() throws TaskFailureException, InterruptedException {
@@ -69,10 +75,6 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
         if (result != MAVEN_SUCCESS) {
             throw new TaskFailureException("Unable to run TMC tests");
         }
-
-        getMonitor().increment();
-
-        checkForInterrupt();
     }
 
     private TestRunResult parseResult() throws TaskFailureException, InterruptedException {
@@ -90,10 +92,6 @@ public class MavenTestrunnerTask  extends AbstractTask<TestRunResult> {
             LOG.error("Unable to parse test file", exception);
             throw new TaskFailureException("Unable to parse test file.");
         }
-
-        getMonitor().increment();
-
-        checkForInterrupt();
 
         return results;
     }

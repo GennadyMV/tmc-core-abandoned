@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.testrunner.maven;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
+import fi.helsinki.cs.tmc.client.core.async.TaskProgressListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.clientspecific.MavenRunner;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
@@ -34,6 +35,7 @@ public class MavenTestrunnerTaskTest {
     private MavenTestrunnerTask task;
 
     private TaskListener listener;
+    private TaskProgressListener progressListener;
     private MavenRunner runner;
     private TestResultFileReader resultFileReader;
 
@@ -47,6 +49,7 @@ public class MavenTestrunnerTaskTest {
 
         this.runner = mock(MavenRunner.class);
         this.listener = mock(TestrunnerListener.class);
+        this.progressListener = mock(TaskProgressListener.class);
         this.resultFileReader = mock(TestResultFileReader.class);
 
         this.exercise = new Exercise("ex", "course");
@@ -54,19 +57,13 @@ public class MavenTestrunnerTaskTest {
         this.project.addProjectFile(temporaryFolder.newFile("pom.xml").getAbsolutePath());
 
         this.task = new MavenTestrunnerTask(listener, project, runner, resultFileReader);
+        this.task.addProgressListener(progressListener);
     }
 
     @Test
     public void setsCorrectDescription() {
 
         assertEquals(MavenTestrunnerTask.DESCRIPTION, task.getDescription());
-    }
-
-    @Test
-    public void setsCorrectAmountOfSteps() {
-
-        assertNotNull(task.getMonitor());
-        assertEquals(3, task.getMonitor().steps());
     }
 
     @Test
@@ -77,13 +74,12 @@ public class MavenTestrunnerTaskTest {
         final Future<?> job = executor.submit(task);
         job.get();
 
-        assertEquals(0, task.getMonitor().progress());
-
-        verify(listener).onStart();
+        verify(progressListener).onProgress(0, 3);
+        verify(progressListener).onStart();
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
         verify(listener).onFailure(any(TaskResult.class));
-        verify(listener).onEnd(any(TaskResult.class));
-        verifyNoMoreInteractions(listener, runner);
+        verify(progressListener).onEnd();
+        verifyNoMoreInteractions(listener, progressListener, runner);
     }
 
     @Test
@@ -95,14 +91,14 @@ public class MavenTestrunnerTaskTest {
         final Future<?> job = executor.submit(task);
         job.get();
 
-        assertEquals(1, task.getMonitor().progress());
-
-        verify(listener).onStart();
+        verify(progressListener).onStart();
+        verify(progressListener).onProgress(0, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
+        verify(progressListener).onProgress(1, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
         verify(listener).onFailure(any(TaskResult.class));
-        verify(listener).onEnd(any(TaskResult.class));
-        verifyNoMoreInteractions(listener, runner);
+        verify(progressListener).onEnd();
+        verifyNoMoreInteractions(listener, progressListener, runner);
     }
 
     @Test
@@ -115,14 +111,15 @@ public class MavenTestrunnerTaskTest {
         final Future<?> job = executor.submit(task);
         job.get();
 
-        assertEquals(2, task.getMonitor().progress());
-
-        verify(listener).onStart();
+        verify(progressListener).onStart();
+        verify(progressListener).onProgress(0, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
+        verify(progressListener).onProgress(1, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
+        verify(progressListener).onProgress(2, 3);
         verify(listener).onFailure(any(TaskResult.class));
-        verify(listener).onEnd(any(TaskResult.class));
-        verifyNoMoreInteractions(listener, runner);
+        verify(progressListener).onEnd();
+        verifyNoMoreInteractions(listener, progressListener, runner);
     }
 
     @Test
@@ -137,13 +134,15 @@ public class MavenTestrunnerTaskTest {
         final Future<?> job = executor.submit(task);
         job.get();
 
-        assertEquals(3, task.getMonitor().progress());
-
-        verify(listener).onStart();
+        verify(progressListener).onStart();
+        verify(progressListener).onProgress(0, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
+        verify(progressListener).onProgress(1, 3);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
+        verify(progressListener).onProgress(2, 3);
+        verify(progressListener).onProgress(3, 3);
         verify(listener).onSuccess(any(TaskResult.class));
-        verify(listener).onEnd(any(TaskResult.class));
-        verifyNoMoreInteractions(listener, runner);
+        verify(progressListener).onEnd();
+        verifyNoMoreInteractions(listener, progressListener, runner);
     }
 }

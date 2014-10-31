@@ -3,7 +3,6 @@ package fi.helsinki.cs.tmc.client.core.async.task;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
-import fi.helsinki.cs.tmc.client.core.async.TaskMonitor;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
 import fi.helsinki.cs.tmc.client.core.domain.Settings;
@@ -32,7 +31,7 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
     public DownloadExerciseTask(final TaskListener listener, final Settings settings, final Unzipper unzipper, final Exercise exercise) {
 
-        super(DESCRIPTION, listener, new TaskMonitor(1));
+        super(DESCRIPTION, listener);
 
         this.settings = settings;
         this.unzipper = unzipper;

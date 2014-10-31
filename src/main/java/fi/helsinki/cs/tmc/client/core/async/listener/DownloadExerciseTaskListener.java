@@ -21,12 +21,6 @@ public class DownloadExerciseTaskListener implements TaskListener {
     }
 
     @Override
-    public void onStart() { }
-
-    @Override
-    public void onEnd(final TaskResult<? extends Object> result) { }
-
-    @Override
     public void onSuccess(final TaskResult<? extends Object> result) {
 
         final File projectRoot = (File) result.result();

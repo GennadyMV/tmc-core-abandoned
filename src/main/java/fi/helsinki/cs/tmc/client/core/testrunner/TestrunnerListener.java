@@ -1,26 +1,20 @@
 package fi.helsinki.cs.tmc.client.core.testrunner;
 
+import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
-import fi.helsinki.cs.tmc.client.core.async.listener.AbstractTaskListener;
 import fi.helsinki.cs.tmc.client.core.clientspecific.UIInvoker;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
 import java.util.List;
 
-public class TestrunnerListener extends AbstractTaskListener {
+public class TestrunnerListener implements TaskListener {
 
     private final UIInvoker uiInvoker;
 
     public TestrunnerListener(final UIInvoker uiInvoker) {
 
         this.uiInvoker = uiInvoker;
-    }
-
-    @Override
-    public void onStart() {
-
-        uiInvoker.invokeTestsRunningWindow();
     }
 
     @Override
@@ -50,9 +44,6 @@ public class TestrunnerListener extends AbstractTaskListener {
 
         uiInvoker.closeTestsRunningWindow();
     }
-
-    @Override
-    public void onEnd(final TaskResult<? extends Object> result) { }
 
     private boolean allPassed(final List<TestCaseResult> testCaseResults) {
 
