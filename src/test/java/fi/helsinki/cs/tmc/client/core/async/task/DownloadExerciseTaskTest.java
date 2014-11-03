@@ -78,8 +78,6 @@ public class DownloadExerciseTaskTest {
     @Test
     public void succesfullyDownloadsZipAndExtractsContents() throws InterruptedException, ExecutionException {
 
-        System.out.println("!!!!!");
-
         task = new DownloadExerciseTask(new TaskListener() {
 
             @Override
