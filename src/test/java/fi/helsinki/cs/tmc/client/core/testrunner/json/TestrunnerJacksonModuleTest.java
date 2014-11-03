@@ -22,7 +22,7 @@ public class TestrunnerJacksonModuleTest {
     }
 
     @Test
-    public void canDeserialize() throws IOException {
+    public void canDeserializeStackTraceElement() throws IOException {
 
         final String json = "{\"declaringClass\":\"class\",\"methodName\":\"method\",\"fileName\":\"file\",\"lineNumber\":12}";
         final StackTraceElement element = mapper.readValue(json, StackTraceElement.class);
@@ -34,12 +34,11 @@ public class TestrunnerJacksonModuleTest {
     }
 
     @Test
-    public void canSerialize() throws IOException {
+    public void canSerializeStackTraceElement() throws IOException {
 
         final StackTraceElement element = new StackTraceElement("class", "method", "file", 12);
         final String json = mapper.writeValueAsString(element);
 
         assertEquals("{\"declaringClass\":\"class\",\"methodName\":\"method\",\"fileName\":\"file\",\"lineNumber\":12}", json);
     }
-
 }
