@@ -12,9 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -23,141 +21,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class Unzipper {
-
-    /**
-     * Information about the results of an unzip operation.
-     *
-     * <p>
-     * All lists contain paths relative to the project directory.
-     * Directories are not included.
-     */
-    public class Result {
-
-        /**
-         * The project directory to which we extracted.
-         */
-        private File projectDirectory;
-
-        /**
-         * Files that were in the zip but did not exist before.
-         * In the usual case of downloading a new project, all files go here.
-         */
-        private List<String> newFiles = new ArrayList<String>();
-
-        /**
-         * Files overwritten as permitted by the given {@code OverwritingDecider}.
-         */
-        private List<String> overwrittenFiles = new ArrayList<String>();
-
-        /**
-         * Files skipped because the given {@code OverwritingDecider} didn't allow overwriting.
-         */
-        private List<String> skippedFiles = new ArrayList<String>();
-
-        /**
-         * Files that existed before but were the same in the zip.
-         */
-        private List<String> unchangedFiles = new ArrayList<String>();
-
-        /**
-         * Files that were deleted because they weren't in the zip.
-         */
-        private List<String> deletedFiles = new ArrayList<String>();
-
-        /**
-         * Files skipped because the given {@code OverwritingDecider} didn't allow deleting.
-         */
-        private List<String> skippedDeletingFiles = new ArrayList<String>();
-
-        Result(final File projectDirectory) {
-
-            this.projectDirectory = projectDirectory;
-        }
-
-        public File getProjectDirectory() {
-
-            return projectDirectory;
-        }
-
-        public void setProjectDirectory(final File projectDirectory) {
-
-            this.projectDirectory = projectDirectory;
-        }
-
-        public List<String> getNewFiles() {
-
-            return newFiles;
-        }
-
-        public void setNewFiles(final List<String> newFiles) {
-
-            this.newFiles = newFiles;
-        }
-
-        public List<String> getOverwrittenFiles() {
-
-            return overwrittenFiles;
-        }
-
-        public void setOverwrittenFiles(final List<String> overwrittenFiles) {
-
-            this.overwrittenFiles = overwrittenFiles;
-        }
-
-        public List<String> getSkippedFiles() {
-
-            return skippedFiles;
-        }
-
-        public void setSkippedFiles(final List<String> skippedFiles) {
-
-            this.skippedFiles = skippedFiles;
-        }
-
-        public List<String> getUnchangedFiles() {
-
-            return unchangedFiles;
-        }
-
-        public void setUnchangedFiles(final List<String> unchangedFiles) {
-
-            this.unchangedFiles = unchangedFiles;
-        }
-
-        public List<String> getDeletedFiles() {
-
-            return deletedFiles;
-        }
-
-        public void setDeletedFiles(final List<String> deletedFiles) {
-
-            this.deletedFiles = deletedFiles;
-        }
-
-        public List<String> getSkippedDeletingFiles() {
-
-            return skippedDeletingFiles;
-        }
-
-        public void setSkippedDeletingFiles(final List<String> skippedDeletingFiles) {
-
-            this.skippedDeletingFiles = skippedDeletingFiles;
-        }
-
-        @Override
-        public String toString() {
-
-            final StringBuilder sb = new StringBuilder();
-            sb.append("New: ").append(newFiles).append('\n');
-            sb.append("Overwritten: ").append(overwrittenFiles).append('\n');
-            sb.append("Skipped: ").append(skippedFiles).append('\n');
-            sb.append("Unchanged: ").append(unchangedFiles).append('\n');
-            sb.append("Deleted: ").append(deletedFiles).append('\n');
-            sb.append("Not deleted: ").append(deletedFiles).append('\n');
-
-            return sb.toString();
-        }
-    }
 
     private static OverwritingDecider neverAllowOverwrites = new NeverOverwritingDecider();
 
@@ -174,14 +37,14 @@ public class Unzipper {
         this.overwriting = overwriting;
     }
 
-    public Result unzipProject(final byte[] data, final File projectDirectory) throws IOException {
+    public UnzippingResult unzipProject(final byte[] data, final File projectDirectory) throws IOException {
 
         return unzipProject(data, projectDirectory, true);
     }
 
-    public Result unzipProject(final byte[] data, final File projectDirectory, final boolean reallyWriteFiles) throws IOException {
+    public UnzippingResult unzipProject(final byte[] data, final File projectDirectory, final boolean reallyWriteFiles) throws IOException {
 
-        final Result result = new Result(projectDirectory);
+        final UnzippingResult result = new UnzippingResult(projectDirectory);
         final Set<String> pathsInZip = new HashSet<String>();
 
         final String projectDirectoryInZip = findProjectDirectoryInZip(data);
@@ -211,17 +74,17 @@ public class Unzipper {
                     if (destinationFile.exists()) {
                         if (fileContentEquals(destinationFile, entryData)) {
                             shouldWrite = false;
-                            result.unchangedFiles.add(destFileRelativePath);
+                            result.getUnchangedFiles().add(destFileRelativePath);
                         } else if (overwriting.mayOverwrite(destFileRelativePath)) {
                             shouldWrite = true;
-                            result.overwrittenFiles.add(destFileRelativePath);
+                            result.getOverwrittenFiles().add(destFileRelativePath);
                         } else {
                             shouldWrite = false;
-                            result.skippedFiles.add(destFileRelativePath);
+                            result.getSkippedFiles().add(destFileRelativePath);
                         }
                     } else {
                         shouldWrite = true;
-                        result.newFiles.add(destFileRelativePath);
+                        result.getNewFiles().add(destFileRelativePath);
                     }
                     if (shouldWrite && reallyWriteFiles) {
                         FileUtils.forceMkdir(destinationFile.getParentFile());
@@ -238,7 +101,7 @@ public class Unzipper {
         return result;
     }
 
-    private void deleteFilesNotInZip(final File projectDirectory, final File currentDirectory, final Result result, final Set<String> pathsInZip, final OverwritingDecider overwriting, final boolean reallyWriteFiles) throws IOException {
+    private void deleteFilesNotInZip(final File projectDirectory, final File currentDirectory, final UnzippingResult result, final Set<String> pathsInZip, final OverwritingDecider overwriting, final boolean reallyWriteFiles) throws IOException {
         for (File file : currentDirectory.listFiles()) {
             String relativePath = file.getPath().substring(projectDirectory.getPath().length());
             relativePath = trimSlashes(relativePath);
@@ -251,15 +114,15 @@ public class Unzipper {
                 if (overwriting.mayDelete(relativePath)) {
                     if (file.isDirectory() && file.listFiles().length > 0) {
                         // Won't delete directories if they still have contents
-                        result.skippedDeletingFiles.add(relativePath);
+                        result.getSkippedDeletingFiles().add(relativePath);
                     } else {
                         if (reallyWriteFiles) {
                             file.delete();
                         }
-                        result.deletedFiles.add(relativePath);
+                        result.getDeletedFiles().add(relativePath);
                     }
                 } else {
-                    result.skippedDeletingFiles.add(relativePath);
+                    result.getSkippedDeletingFiles().add(relativePath);
                 }
             }
         }

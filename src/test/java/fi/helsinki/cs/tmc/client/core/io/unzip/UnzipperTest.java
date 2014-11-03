@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.client.core.io.unzip;
 
-import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper.Result;
 import fi.helsinki.cs.tmc.client.core.io.unzip.decider.OverwritingDecider;
 
 import java.io.ByteArrayOutputStream;
@@ -79,7 +78,7 @@ public class UnzipperTest {
         zipOut.close();
 
         final Unzipper unzipper = new Unzipper();
-        final Result result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("my-project"));
+        final UnzippingResult result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("my-project"));
 
         assertEquals(1, tempDir.getRoot().listFiles().length);
         String contents = FileUtils.readFileToString(new File(tempDir.getRoot() + File.separator + "my-project/nbproject/project.xml"));
@@ -127,7 +126,7 @@ public class UnzipperTest {
         when(overwriting.mayOverwrite(FILE2_NAME)).thenReturn(true);
 
         final Unzipper unzipper = new Unzipper(overwriting);
-        final Result result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
+        final UnzippingResult result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
 
         verify(overwriting).mayOverwrite(FILE1_NAME);
         verify(overwriting).mayOverwrite(FILE2_NAME);
@@ -173,7 +172,7 @@ public class UnzipperTest {
         when(overwriting.mayDelete(FILE3_NAME)).thenReturn(false);
 
         final Unzipper unzipper = new Unzipper(overwriting);
-        final Result result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
+        final UnzippingResult result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
 
         verify(overwriting).mayDelete(FILE2_NAME);
         verify(overwriting).mayDelete(FILE3_NAME);
@@ -216,7 +215,7 @@ public class UnzipperTest {
         when(overwriting.mayDelete(GENERIC + fsep + PRESERVED)).thenReturn(false);
 
         final Unzipper unzipper = new Unzipper(overwriting);
-        final Result result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
+        final UnzippingResult result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"));
 
         verify(overwriting).mayDelete(GENERIC + fsep + DELETED + fsep + FILE2_NAME);
         verify(overwriting).mayDelete(GENERIC + fsep + DELETED);
@@ -257,7 +256,7 @@ public class UnzipperTest {
         when(overwriting.mayDelete(GENERIC + fsep + FILE3_NAME)).thenReturn(true);
 
         final Unzipper unzipper = new Unzipper(overwriting);
-        final Result result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"), false);
+        final UnzippingResult result = unzipper.unzipProject(zipBuffer.toByteArray(), inTempDir("dest"), false);
 
         verify(overwriting).mayOverwrite(FILE1_NAME);
         verify(overwriting).mayOverwrite(FILE2_NAME);
