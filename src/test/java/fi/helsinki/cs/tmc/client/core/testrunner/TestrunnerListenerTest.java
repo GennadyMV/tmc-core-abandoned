@@ -62,6 +62,14 @@ public class TestrunnerListenerTest {
     }
 
     @Test
+    public void onSuccessOpensTestResultWindow() {
+
+        taskResult = new TaskResult<>(buildTestRunResult(true, true));
+        listener.onSuccess(taskResult);
+        verify(invoker).invokeTestResultWindow(any(List.class));
+    }
+
+    @Test
     public void onSuccessOpensSubmitToServerWindowIfAllTestsWereSuccesfull() {
 
         taskResult = new TaskResult<>(buildTestRunResult(true, true));
