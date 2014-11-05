@@ -7,12 +7,16 @@ import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.domain.Course;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
+import fi.helsinki.cs.tmc.client.core.domain.Project;
+import fi.helsinki.cs.tmc.client.core.domain.ProjectStatus;
 import fi.helsinki.cs.tmc.client.core.domain.Settings;
+import fi.helsinki.cs.tmc.client.core.io.reader.TmcProjectFileReader;
 import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper;
 import fi.helsinki.cs.tmc.client.core.testutil.MockTMCServer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,6 +49,7 @@ public class DownloadExerciseTaskTest {
     private Exercise exercise;
     private Course course;
     private Unzipper unzipper;
+    private TmcProjectFileReader projectFileReader;
 
     private ExecutorService executor;
 
@@ -69,10 +74,11 @@ public class DownloadExerciseTaskTest {
         listener = mock(TaskListener.class);
 
         unzipper = new Unzipper();
+        projectFileReader = new TmcProjectFileReader();
 
         executor = Executors.newSingleThreadExecutor();
 
-        task = new DownloadExerciseTask(listener, settings, unzipper, exercise);
+        task = new DownloadExerciseTask(listener, settings, unzipper, projectFileReader, exercise);
     }
 
     @Test
@@ -100,7 +106,7 @@ public class DownloadExerciseTaskTest {
                 org.junit.Assert.fail("task should not be interrupted.");
             }
 
-        }, settings, unzipper, exercise);
+        }, settings, unzipper, projectFileReader, exercise);
 
         executor.submit(task).get();
 
@@ -137,7 +143,7 @@ public class DownloadExerciseTaskTest {
                 org.junit.Assert.fail("Request should not be interrupted");
             }
 
-        }, settings, unzipper, exercise);
+        }, settings, unzipper, projectFileReader, exercise);
 
         executor.submit(task).get();
     }
@@ -167,7 +173,7 @@ public class DownloadExerciseTaskTest {
                 org.junit.Assert.fail("Request should not be interrupted");
             }
 
-        }, settings, unzipper, exercise);
+        }, settings, unzipper, projectFileReader, exercise);
 
         executor.submit(task).get();
 
@@ -203,9 +209,82 @@ public class DownloadExerciseTaskTest {
                 org.junit.Assert.fail("task should not be interrupted.");
             }
 
-        }, settings, unzipper, exercise);
+        }, settings, unzipper, projectFileReader, exercise);
 
         executor.submit(task).get();
+    }
+
+    @Test
+    public void successUpdatesExerciseAndCreatesNewProject() throws InterruptedException, ExecutionException {
+
+        executor.submit(task).get();
+
+        assertNotNull(exercise.getProject());
+
+        final Project project = exercise.getProject();
+        assertEquals(exercise, project.getExercise());
+
+        assertEquals(ProjectStatus.DOWNLOADED, project.getStatus());
+
+        assertTrue(project.getRootPath().contains("/c1/"));
+        assertTrue(project.getRootPath().contains("/e1"));
+
+        assertTrue(project.containsFile(project.getRootPath() + "/test/OhjelmaTest.java"));
+        assertTrue(project.containsFile(project.getRootPath() + "/src/Ohjelma.java"));
+        assertTrue(project.containsFile(project.getRootPath() + "/nbproject/project.xml"));
+        assertTrue(project.containsFile(project.getRootPath() + "/lib/testrunner/tmc-junit-runner.jar"));
+        assertTrue(project.containsFile(project.getRootPath() + "/lib/junit-4.10.jar"));
+        assertTrue(project.containsFile(project.getRootPath() + "/build.xml"));
+        assertTrue(project.containsFile(project.getRootPath() + "/.tmcproject.json"));
+    }
+
+    @Test
+    public void taskIncludesAlreadyPresentFilesInProject() throws InterruptedException, ExecutionException, IOException {
+
+        new File(projectsRoot.getRoot(), "c1/e1").mkdirs();
+        new File(projectsRoot.getRoot(), "c1/e1/foo.bar").createNewFile();
+
+        executor.submit(task).get();
+
+        assertTrue(exercise.getProject().containsFile(exercise.getProject().getRootPath() + "/foo.bar"));
+    }
+
+    @Test
+    public void successUpdatesExerciseAndProject() throws InterruptedException, ExecutionException, IOException {
+
+        System.out.println("!!!!!!!!!!!!");
+
+        final File folder = new File(projectsRoot.getRoot(), "c1/e1");
+        folder.mkdirs();
+
+        final File f1 = new File(projectsRoot.getRoot(), "c1/e1/build.xml");
+        f1.createNewFile();
+        System.out.println(f1.getAbsolutePath());
+
+        final File f2 = new File(projectsRoot.getRoot(), "c1/e1/.tmcproject.json");
+        f2.createNewFile();
+        System.out.println(f2.getAbsolutePath());
+
+        Project project = new Project(exercise, folder.getAbsolutePath(), Arrays.asList(f1.getAbsolutePath(), f2.getAbsolutePath()));
+        exercise.setProject(project);
+
+        executor.submit(task).get();
+
+        project = exercise.getProject();
+        assertEquals(exercise, project.getExercise());
+
+        assertEquals(ProjectStatus.DOWNLOADED, project.getStatus());
+
+        assertTrue(project.getRootPath().contains("/c1/"));
+        assertTrue(project.getRootPath().contains("/e1"));
+
+        assertTrue(project.containsFile(project.getRootPath() + "/test/OhjelmaTest.java"));
+        assertTrue(project.containsFile(project.getRootPath() + "/src/Ohjelma.java"));
+        assertTrue(project.containsFile(project.getRootPath() + "/nbproject/project.xml"));
+        assertTrue(project.containsFile(project.getRootPath() + "/lib/testrunner/tmc-junit-runner.jar"));
+        assertTrue(project.containsFile(project.getRootPath() + "/lib/junit-4.10.jar"));
+        assertTrue(project.containsFile(project.getRootPath() + "/build.xml"));
+        assertTrue(project.containsFile(project.getRootPath() + "/.tmcproject.json"));
     }
 
     private void assertProjectRootContainsFile(final String path) {
@@ -228,6 +307,15 @@ public class DownloadExerciseTaskTest {
         return false;
     }
 
-
+    private void print(final File f) {
+        System.out.println("D - " + f.getAbsolutePath());
+        for (File sf : f.listFiles()) {
+            if (sf.isDirectory()) {
+                print(sf);
+            } else {
+                System.out.println("F - " + sf.getAbsolutePath());
+            }
+        }
+    }
 
 }

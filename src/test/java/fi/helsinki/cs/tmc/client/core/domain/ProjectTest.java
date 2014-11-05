@@ -22,7 +22,7 @@ public class ProjectTest {
         projectFiles = new ArrayList<String>();
 
         exercise = new Exercise("testName", "testCourse");
-        project = new Project(exercise, projectFiles);
+        project = new Project(exercise, "", projectFiles);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ProjectTest {
     public void testEquals() {
 
         final Exercise exercise2 = new Exercise("testname2", "testcourse");
-        final Project p = new Project(exercise2, projectFiles);
+        final Project p = new Project(exercise2, "", projectFiles);
 
         assertFalse(p.equals(project));
         assertFalse(project.equals(p));
@@ -95,9 +95,10 @@ public class ProjectTest {
     public void testContainsFile() {
 
         projectFiles.add("directory/pom.xml");
-        final Project p = new Project(exercise, projectFiles);
+        final Project p = new Project(exercise, "", projectFiles);
+        p.setRootPath("directory");
 
-        assertTrue(!p.containsFile(null));
+        assertFalse(p.containsFile(null));
         assertTrue(p.containsFile("directory/trololo"));
     }
 
@@ -105,22 +106,12 @@ public class ProjectTest {
     public void testRootPath() {
 
         projectFiles.add("directory/pom.xml");
-        Project p = new Project(exercise, projectFiles);
+        Project p = new Project(exercise, "", projectFiles);
+        p.setRootPath("directory");
         assertEquals("directory", p.getRootPath());
 
-        p = new Project(exercise, new ArrayList<String>());
+        p = new Project(exercise, "", new ArrayList<String>());
         assertEquals("", p.getRootPath());
-    }
-
-    @Test
-    public void existsOnDiskTest() {
-
-        projectFiles.add("pom.xml");
-        assertFalse(project.existsOnDisk());
-        projectFiles.add("/src/pom.xml");
-        assertTrue(project.existsOnDisk());
-        project.setProjectFiles(new ArrayList<String>());
-        assertFalse(project.existsOnDisk());
     }
 
     @Test

@@ -5,16 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.exception.TaskFailureException;
 import fi.helsinki.cs.tmc.client.core.domain.Exercise;
+import fi.helsinki.cs.tmc.client.core.domain.Project;
+import fi.helsinki.cs.tmc.client.core.domain.ProjectStatus;
 import fi.helsinki.cs.tmc.client.core.domain.Settings;
 import fi.helsinki.cs.tmc.client.core.domain.Zip;
 import fi.helsinki.cs.tmc.client.core.http.HttpClientFactory;
 import fi.helsinki.cs.tmc.client.core.http.HttpWorker;
+import fi.helsinki.cs.tmc.client.core.io.reader.TmcProjectFileReader;
 import fi.helsinki.cs.tmc.client.core.io.unzip.Unzipper;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.logging.log4j.LogManager;
@@ -27,14 +32,16 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
     private Settings settings;
     private Unzipper unzipper;
+    private TmcProjectFileReader projectFileReader;
     private Exercise exercise;
 
-    public DownloadExerciseTask(final TaskListener listener, final Settings settings, final Unzipper unzipper, final Exercise exercise) {
+    public DownloadExerciseTask(final TaskListener listener, final Settings settings, final Unzipper unzipper, final TmcProjectFileReader projectFileReader, final Exercise exercise) {
 
         super(DESCRIPTION, listener);
 
         this.settings = settings;
         this.unzipper = unzipper;
+        this.projectFileReader = projectFileReader;
         this.exercise = exercise;
     }
 
@@ -53,7 +60,11 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
         checkForInterrupt();
 
-        return extractProject(zip);
+        final File projectRoot =  extractProject(zip);
+
+        updateExerciseAndProject(projectRoot);
+
+        return projectRoot;
     }
 
     private HttpWorker buildHttpWorker() {
@@ -107,6 +118,41 @@ public class DownloadExerciseTask extends AbstractTask<File> {
         }
 
         return destinationFolder;
+    }
+
+    private void updateExerciseAndProject(final File projectRoot) {
+
+        final List<String> files = new ArrayList<>();
+        recursivelyAddFiles(files, projectRoot);
+
+        if (exercise.getProject() == null) {
+            exercise.setProject(new Project(exercise, projectRoot.getAbsolutePath(), files));
+        } else {
+            exercise.getProject().setProjectFiles(files);
+        }
+
+        final Project project = exercise.getProject();
+
+        project.setExercise(exercise);
+        project.setStatus(ProjectStatus.DOWNLOADED);
+
+        final File tmcProjectFile = new File(projectRoot.getAbsolutePath() + File.separator + ".tmcproject.yml");
+        project.setExtraStudentFiles(projectFileReader.read(tmcProjectFile).getExtraStudentFiles());
+    }
+
+    private void recursivelyAddFiles(final List<String> files, final File root) {
+
+        if (!root.isDirectory()) {
+            throw new IllegalArgumentException("Provided a file instead of a folder for DownloadExerciseTask.recursivelyAddFiles()");
+        }
+
+        for (File file : root.listFiles()) {
+            if (file.isFile()) {
+                files.add(file.getAbsolutePath());
+            } else {
+                recursivelyAddFiles(files, file);
+            }
+        }
     }
 
     @Override
