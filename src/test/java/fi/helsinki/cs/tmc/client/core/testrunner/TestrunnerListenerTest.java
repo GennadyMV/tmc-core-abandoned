@@ -34,7 +34,7 @@ public class TestrunnerListenerTest {
         final List<TestCaseResult> caseResults = new ArrayList<>();
 
         for (boolean success : results) {
-            caseResults.add(new TestCaseResult("resultName", success, "resultMessage"));
+            caseResults.add(new TestCaseResult("resultName", new String[]{"point"}, success, "resultMessage"));
         }
 
         return new TestRunResult(caseResults);
@@ -62,17 +62,28 @@ public class TestrunnerListenerTest {
     }
 
     @Test
-    public void onSuccessOpensSomeTestsFailedWindowIfAnyTestWasUnsuccessfull() {
-
-        listener.onSuccess(taskResult);
-        verify(invoker).invokerSomeTestsFailedLocallyWindow();
-    }
-
-    @Test
-    public void onSuccessOpensSubmitToServerWindowIfAnyTestWasUnsuccessfull() {
+    public void onSuccessOpensSubmitToServerWindowIfAllTestsWereSuccesfull() {
 
         taskResult = new TaskResult<>(buildTestRunResult(true, true));
         listener.onSuccess(taskResult);
         verify(invoker).invokeSubmitToServerWindow();
+    }
+
+    @Test
+    public void onSuccessOpenAllTestsFailedWindowIfAllTestsFailed() {
+
+        taskResult = new TaskResult<>(buildTestRunResult(false, false));
+        listener.onSuccess(taskResult);
+        verify(invoker).invokeNoPointsFromLocalTestsWindow();
+    }
+
+    @Test
+    public void onSuccessOpensSomePointsAwardedlocallyWindowIfAllTestsPassedForSomePoints() {
+
+        taskResult = new TaskResult<>(buildTestRunResult(true, true));
+        taskResult.result().getTestCaseResults().add(new TestCaseResult("another", new String[]{"another"}, false, "failed"));
+        listener.onSuccess(taskResult);
+
+        verify(invoker).invokeSomePointsFromLocalTestsWindow(any(List.class));
     }
 }

@@ -17,7 +17,8 @@ public interface UIInvoker {
     void invokeTestsRunningWindow();
     void closeTestsRunningWindow();
     void invokeSubmitToServerWindow();
-    void invokerSomeTestsFailedLocallyWindow();
+    void invokeSomePointsFromLocalTestsWindow(List<String> awardedPoints);
+    void invokeNoPointsFromLocalTestsWindow();
 
 
     /* IDE Interactions */

@@ -11,15 +11,17 @@ import static fi.helsinki.cs.tmc.testrunner.TestCase.Status.PASSED;
 public class TestCaseResult {
 
     private String name;
+    private String[] pointNames;
     private boolean successful;
     private String message;
     private CaughtException exception;
 
     public TestCaseResult() { }
 
-    public TestCaseResult(final String name, final boolean successful, final String message) {
+    public TestCaseResult(final String name, final String[] pointNames, final boolean successful, final String message) {
 
         this.name = name;
+        this.pointNames = pointNames;
         this.successful = successful;
         this.message = message;
     }
@@ -29,18 +31,21 @@ public class TestCaseResult {
         return name;
     }
 
+    public String[] getPointNames() {
+
+        return pointNames;
+    }
+
     public boolean isSuccessful() {
 
         return successful;
     }
 
-    // may be null
     public String getMessage() {
 
         return message;
     }
 
-    // may be null
     public CaughtException getException() {
 
         return exception;
@@ -50,13 +55,16 @@ public class TestCaseResult {
      * Creates a TestCaseResult from a TestCase probably returned by a local run
      * of tmc-junit-runner.
      */
-    public static TestCaseResult fromTestCaseRecord(final TestCase tc) {
+    public static TestCaseResult fromTestCaseRecord(final TestCase testCase) {
 
-        final TestCaseResult tcr = new TestCaseResult();
-        tcr.name = tc.className + " " + tc.methodName;
-        tcr.successful = tc.status == PASSED;
-        tcr.message = tc.message;
-        tcr.exception = tc.exception;
-        return tcr;
+        final TestCaseResult testCaseResult = new TestCaseResult();
+
+        testCaseResult.name = testCase.className + " " + testCase.methodName;
+        testCaseResult.pointNames = testCase.pointNames;
+        testCaseResult.successful = testCase.status == PASSED;
+        testCaseResult.message = testCase.message;
+        testCaseResult.exception = testCase.exception;
+
+        return testCaseResult;
     }
 }

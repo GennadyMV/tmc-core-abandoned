@@ -3,7 +3,6 @@ package fi.helsinki.cs.tmc.client.core.testrunner;
 import fi.helsinki.cs.tmc.client.core.async.TaskListener;
 import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.clientspecific.UIInvoker;
-import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
 import java.util.List;
@@ -26,10 +25,18 @@ public class TestrunnerListener implements TaskListener {
 
         uiInvoker.invokeTestResultWindow(testRunResult.getTestCaseResults());
 
-        if (allPassed(testRunResult.getTestCaseResults())) {
+        if (testRunResult.allTestsPassed()) {
             uiInvoker.invokeSubmitToServerWindow();
+            return;
+        }
+
+        final List<String> awardedPoints = testRunResult.getAwardedPoints();
+        if (awardedPoints.isEmpty()) {
+            uiInvoker.invokeNoPointsFromLocalTestsWindow();
+            return;
         } else {
-            uiInvoker.invokerSomeTestsFailedLocallyWindow();
+            uiInvoker.invokeSomePointsFromLocalTestsWindow(awardedPoints);
+            return;
         }
     }
 
@@ -43,16 +50,5 @@ public class TestrunnerListener implements TaskListener {
     public void onInterrupt(final TaskResult<? extends Object> result) {
 
         uiInvoker.closeTestsRunningWindow();
-    }
-
-    private boolean allPassed(final List<TestCaseResult> testCaseResults) {
-
-        for (final TestCaseResult result : testCaseResults) {
-            if (!result.isSuccessful()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

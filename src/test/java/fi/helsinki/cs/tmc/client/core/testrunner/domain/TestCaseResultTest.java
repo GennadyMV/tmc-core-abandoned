@@ -18,7 +18,7 @@ public class TestCaseResultTest {
     @Before
     public void setUp() throws Exception {
 
-        this.result = new TestCaseResult("name", true, "message");
+        this.result = new TestCaseResult("name", new String[]{"point1"}, true, "message");
     }
 
     @Test
@@ -26,6 +26,8 @@ public class TestCaseResultTest {
 
         assertEquals("name", result.getName());
         assertTrue(result.isSuccessful());
+        assertEquals(1, result.getPointNames().length);
+        assertEquals("point1", result.getPointNames()[0]);
         assertEquals("message", result.getMessage());
         assertNull(result.getException());
     }
@@ -54,6 +56,4 @@ public class TestCaseResultTest {
 
         assertTrue(result.isSuccessful());
     }
-
-
 }

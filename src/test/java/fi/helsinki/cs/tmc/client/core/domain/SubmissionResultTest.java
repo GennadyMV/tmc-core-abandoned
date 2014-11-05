@@ -47,9 +47,9 @@ public class SubmissionResultTest {
         result.setStatus(Status.OK);
 
         final List<TestCaseResult> tcrList = new ArrayList<TestCaseResult>();
-        tcrList.add(new TestCaseResult("name1", true, "message1"));
-        tcrList.add(new TestCaseResult("name2", false, "message2"));
-        tcrList.add(new TestCaseResult("name3", true, "message3"));
+        tcrList.add(new TestCaseResult("name1", new String[]{"point1"}, true, "message1"));
+        tcrList.add(new TestCaseResult("name2", new String[]{"point1"}, false, "message2"));
+        tcrList.add(new TestCaseResult("name3", new String[]{"point1"}, true, "message3"));
         result.setTestCases(tcrList);
 
     }
@@ -76,8 +76,8 @@ public class SubmissionResultTest {
         result.setTestCases(l);
         assertTrue(result.allTestCasesFailed());
 
-        l.add(new TestCaseResult("", false, ""));
-        l.add(new TestCaseResult("", false, ""));
+        l.add(new TestCaseResult("", new String[]{"point2"}, false, ""));
+        l.add(new TestCaseResult("", new String[]{"point2"}, false, ""));
         assertTrue(result.allTestCasesFailed());
     }
 
@@ -90,8 +90,8 @@ public class SubmissionResultTest {
         result.setTestCases(l);
         assertTrue(result.allTestCasesSucceeded());
 
-        l.add(new TestCaseResult("", true, ""));
-        l.add(new TestCaseResult("", true, ""));
+        l.add(new TestCaseResult("", new String[]{"point3"}, true, ""));
+        l.add(new TestCaseResult("", new String[]{"point3"}, true, ""));
         assertTrue(result.allTestCasesSucceeded());
     }
 
