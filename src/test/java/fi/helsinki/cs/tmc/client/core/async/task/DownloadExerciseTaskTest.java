@@ -30,7 +30,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
 import static org.junit.Assert.*;
+
 import static org.mockito.Mockito.*;
 
 public class DownloadExerciseTaskTest {
@@ -227,8 +229,8 @@ public class DownloadExerciseTaskTest {
 
         assertEquals(ProjectStatus.DOWNLOADED, project.getStatus());
 
-        assertTrue(project.getRootPath().contains("/c1/"));
-        assertTrue(project.getRootPath().contains("/e1"));
+        assertTrue(project.getRootPath().contains(File.separator + "c1" + File.separator));
+        assertTrue(project.getRootPath().contains(File.separator + "e1"));
 
         assertTrue(project.containsFile(project.getRootPath() + "/test/OhjelmaTest.java"));
         assertTrue(project.containsFile(project.getRootPath() + "/src/Ohjelma.java"));
@@ -276,8 +278,8 @@ public class DownloadExerciseTaskTest {
 
         assertEquals(ProjectStatus.DOWNLOADED, project.getStatus());
 
-        assertTrue(project.getRootPath().contains("/c1/"));
-        assertTrue(project.getRootPath().contains("/e1"));
+        assertTrue(project.getRootPath().contains(File.separator + "c1" + File.separator));
+        assertTrue(project.getRootPath().contains(File.separator + "e1"));
 
         assertTrue(project.containsFile(project.getRootPath() + "/test/OhjelmaTest.java"));
         assertTrue(project.containsFile(project.getRootPath() + "/src/Ohjelma.java"));
