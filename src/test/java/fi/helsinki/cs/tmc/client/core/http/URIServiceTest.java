@@ -22,7 +22,7 @@ public class URIServiceTest {
         final Course course = new Course();
         course.setDetailsUrl("http://localhost:8089/hy/courses/1.json");
 
-        settings = new Settings("http://localhost:8089", "7", "Core", "1", course, "password", "username", null);
+        settings = new Settings("http://localhost:8089", "7", "Core", "1", course, "password", "username", null, null);
         uriService = new URIService(settings);
     }
 

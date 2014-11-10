@@ -17,6 +17,7 @@ import fi.helsinki.cs.tmc.client.core.testutil.MockTMCServer;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -69,7 +70,7 @@ public class DownloadExerciseTaskTest {
         exercise.setCourse(course);
         exercise.setDownloadUrl("http://localhost:8089/exercises/1.zip");
 
-        settings = new Settings("http://localhost:8089/", "7", "Core", "1", course, "password", "username", projectsRoot.getRoot());
+        settings = new Settings("http://localhost:8089/", "7", "Core", "1", course, "password", "username", projectsRoot.getRoot(), Locale.ENGLISH);
 
         listener = mock(TaskListener.class);
 

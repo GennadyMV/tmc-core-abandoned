@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
 import java.io.File;
+import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ public class SettingsTest {
     private static final String PASSWORD = "password";
     private static final String USERNAME = "username";
     private static final File PROJECTS_ROOT = new File("foo/");
+    private static final Locale LOCALE = Locale.ENGLISH;
 
     private Settings settings;
 
@@ -34,7 +36,7 @@ public class SettingsTest {
     @Test
     public void constructingWithParametersSavesParameters() {
 
-        settings = new Settings(TMC_SERVER_URL, TMC_API_VERSION, CLIENT_ID, CLIENT_VERSION, ACTIVE_COURSE, PASSWORD, USERNAME, PROJECTS_ROOT);
+        settings = new Settings(TMC_SERVER_URL, TMC_API_VERSION, CLIENT_ID, CLIENT_VERSION, ACTIVE_COURSE, PASSWORD, USERNAME, PROJECTS_ROOT, LOCALE);
 
         assertEquals(TMC_SERVER_URL, settings.getTmcServerBaseUrl());
         assertEquals(TMC_API_VERSION, settings.getTmcApiVersion());
@@ -44,6 +46,7 @@ public class SettingsTest {
         assertEquals(PASSWORD, settings.getPassword());
         assertEquals(USERNAME, settings.getUsername());
         assertEquals(PROJECTS_ROOT, settings.getProjectsRoot());
+        assertEquals(LOCALE, settings.getLocale());
     }
 
     @Test
@@ -100,5 +103,12 @@ public class SettingsTest {
 
         settings.setProjectsRoot(PROJECTS_ROOT);
         assertEquals(PROJECTS_ROOT, settings.getProjectsRoot());
+    }
+
+    @Test
+    public void canSetLocale() {
+
+        settings.setLocale(LOCALE);
+        assertEquals(LOCALE, settings.getLocale());
     }
 }

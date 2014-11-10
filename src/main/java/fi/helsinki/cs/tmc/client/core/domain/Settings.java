@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
 import java.io.File;
+import java.util.Locale;
 
 public class Settings {
 
@@ -12,6 +13,7 @@ public class Settings {
     private String password;
     private String username;
     private File projectsRoot;
+    private Locale locale;
 
     public Settings() { }
 
@@ -22,7 +24,8 @@ public class Settings {
                     final Course activeCourse,
                     final String password,
                     final String username,
-                    final File projectsRoot) {
+                    final File projectsRoot,
+                    final Locale locale) {
 
         this.tmcServerBaseUrl = tmcServerBaseUrl;
         this.tmcApiVersion = tmcApiVersion;
@@ -32,6 +35,7 @@ public class Settings {
         this.password = password;
         this.username = username;
         this.projectsRoot = projectsRoot;
+        this.locale = locale;
     }
 
     public String getTmcServerBaseUrl() {
@@ -114,6 +118,13 @@ public class Settings {
         this.projectsRoot = projectsRoot;
     }
 
+    public Locale getLocale() {
 
+        return locale;
+    }
 
+    public void setLocale(final Locale locale) {
+
+        this.locale = locale;
+    }
 }
