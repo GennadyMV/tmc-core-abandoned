@@ -9,6 +9,8 @@ import fi.helsinki.cs.tmc.client.core.domain.Project;
 import fi.helsinki.cs.tmc.client.core.io.reader.TestResultFileReader;
 import fi.helsinki.cs.tmc.client.core.testrunner.TestrunnerListener;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
+import fi.helsinki.cs.tmc.stylerunner.CheckstyleRunner;
+import fi.helsinki.cs.tmc.stylerunner.validation.CheckstyleResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +23,17 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.*;
+
 import static org.mockito.Mockito.*;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(CheckstyleRunner.class)
 public class MavenTestrunnerTaskTest {
 
     @Rule
@@ -38,6 +47,7 @@ public class MavenTestrunnerTaskTest {
     private TaskProgressListener progressListener;
     private MavenRunner runner;
     private TestResultFileReader resultFileReader;
+    private CheckstyleRunner checkstyleRunner;
 
     private Project project;
     private Exercise exercise;
@@ -51,12 +61,13 @@ public class MavenTestrunnerTaskTest {
         this.listener = mock(TestrunnerListener.class);
         this.progressListener = mock(TaskProgressListener.class);
         this.resultFileReader = mock(TestResultFileReader.class);
+        this.checkstyleRunner = mock(CheckstyleRunner.class);
 
         this.exercise = new Exercise("ex", "course");
         this.project = new Project(exercise);
         this.project.addProjectFile(temporaryFolder.newFile("pom.xml").getAbsolutePath());
 
-        this.task = new MavenTestrunnerTask(listener, project, runner, resultFileReader);
+        this.task = new MavenTestrunnerTask(listener, project, runner, resultFileReader, checkstyleRunner);
         this.task.addProgressListener(progressListener);
     }
 
@@ -74,12 +85,12 @@ public class MavenTestrunnerTaskTest {
         final Future<?> job = executor.submit(task);
         job.get();
 
-        verify(progressListener).onProgress(0, 3);
+        verify(progressListener).onProgress(0, 4);
         verify(progressListener).onStart();
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
         verify(listener).onFailure(any(TaskResult.class));
         verify(progressListener).onEnd();
-        verifyNoMoreInteractions(listener, progressListener, runner);
+        verifyNoMoreInteractions(listener, progressListener, runner, checkstyleRunner);
     }
 
     @Test
@@ -92,13 +103,13 @@ public class MavenTestrunnerTaskTest {
         job.get();
 
         verify(progressListener).onStart();
-        verify(progressListener).onProgress(0, 3);
+        verify(progressListener).onProgress(0, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
-        verify(progressListener).onProgress(1, 3);
+        verify(progressListener).onProgress(1, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
         verify(listener).onFailure(any(TaskResult.class));
         verify(progressListener).onEnd();
-        verifyNoMoreInteractions(listener, progressListener, runner);
+        verifyNoMoreInteractions(listener, progressListener, runner, checkstyleRunner);
     }
 
     @Test
@@ -112,14 +123,14 @@ public class MavenTestrunnerTaskTest {
         job.get();
 
         verify(progressListener).onStart();
-        verify(progressListener).onProgress(0, 3);
+        verify(progressListener).onProgress(0, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
-        verify(progressListener).onProgress(1, 3);
+        verify(progressListener).onProgress(1, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
-        verify(progressListener).onProgress(2, 3);
+        verify(progressListener).onProgress(2, 4);
         verify(listener).onFailure(any(TaskResult.class));
         verify(progressListener).onEnd();
-        verifyNoMoreInteractions(listener, progressListener, runner);
+        verifyNoMoreInteractions(listener, progressListener, runner, checkstyleRunner);
     }
 
     @Test
@@ -130,19 +141,22 @@ public class MavenTestrunnerTaskTest {
         when(runner.runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project))).thenReturn(0);
         when(runner.runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project))).thenReturn(0);
         when(resultFileReader.parseTestResults(any(File.class))).thenReturn(results);
+        when(checkstyleRunner.run()).thenReturn(new CheckstyleResult());
 
         final Future<?> job = executor.submit(task);
         job.get();
 
         verify(progressListener).onStart();
-        verify(progressListener).onProgress(0, 3);
+        verify(progressListener).onProgress(0, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.COMPILE_GOAL), eq(project));
-        verify(progressListener).onProgress(1, 3);
+        verify(progressListener).onProgress(1, 4);
         verify(runner).runGoal(eq(MavenTestrunnerTask.TESTRUNNER_GOAL), eq(project));
-        verify(progressListener).onProgress(2, 3);
-        verify(progressListener).onProgress(3, 3);
+        verify(progressListener).onProgress(2, 4);
+        verify(progressListener).onProgress(3, 4);
+        verify(checkstyleRunner).run();
+        verify(progressListener).onProgress(4, 4);
         verify(listener).onSuccess(any(TaskResult.class));
         verify(progressListener).onEnd();
-        verifyNoMoreInteractions(listener, progressListener, runner);
+        verifyNoMoreInteractions(listener, progressListener, runner, checkstyleRunner);
     }
 }

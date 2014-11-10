@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.testrunner.domain;
 
+import fi.helsinki.cs.tmc.stylerunner.validation.ValidationResult;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,7 +15,8 @@ import java.util.Set;
  */
 public class TestRunResult {
 
-    private final List<TestCaseResult> testCaseResults;
+    private List<TestCaseResult> testCaseResults;
+    private ValidationResult validationResult;
 
     public TestRunResult(final List<TestCaseResult> testCaseResults) {
 
@@ -23,6 +26,19 @@ public class TestRunResult {
     public List<TestCaseResult> getTestCaseResults() {
 
         return testCaseResults;
+    }
+
+    public void setTestCaseResults(final List<TestCaseResult> results) {
+
+        this.testCaseResults = testCaseResults;
+    }
+
+    public ValidationResult getValidationResult() {
+        return validationResult;
+    }
+
+    public void setValidationResult(final ValidationResult validationResult) {
+        this.validationResult = validationResult;
     }
 
     public List<String> getAwardedPoints() {
