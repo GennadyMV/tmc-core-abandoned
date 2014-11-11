@@ -69,8 +69,7 @@ public class CancellableHttpRequest {
     private void assertServerRespondedWithStatusCode2xx(final HttpResponse response) throws HttpResponseException {
 
         final int statusCode = response.getStatusLine().getStatusCode();
-
-        if (statusCode < 200 || statusCode >= 300) {
+        if (!(statusCode >= 200 && statusCode < 300)) {
             throw new HttpResponseException(statusCode, "Expected response code 2xx, actual response was " + statusCode);
         }
     }

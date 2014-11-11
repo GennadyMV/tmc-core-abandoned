@@ -16,12 +16,13 @@ import org.apache.commons.io.IOUtils;
 public class Zipper {
 
     public static final ZippingDecider ZIP_ALL_THE_THINGS = new ZipEverythingDecider();
+    public static final char SEPARATOR = '/';
 
-    private File rootDirirectory;
+    private File rootDirectory;
     private ZippingDecider zippingDecider;
 
     public Zipper(final File rootDirectory, final ZippingDecider zippingDecider) {
-        this.rootDirirectory = rootDirectory;
+        this.rootDirectory = rootDirectory;
         this.zippingDecider = zippingDecider;
     }
 
@@ -29,24 +30,21 @@ public class Zipper {
      * Zip up a project directory, only including stuff decided by the {@link ZippingDecider}.
      */
     public byte[] zipProjectSources() throws IOException {
-        if (!rootDirirectory.exists() || !rootDirirectory.isDirectory()) {
-            throw new FileNotFoundException("Root directory " + rootDirirectory + " not found for zipping!");
+        if (!rootDirectory.isDirectory()) {
+            throw new FileNotFoundException("Root directory " + rootDirectory + " not found for zipping!");
         }
 
         final ByteArrayOutputStream zipBuffer = new ByteArrayOutputStream();
-        final ZipOutputStream zipStrem = new ZipOutputStream(zipBuffer);
 
-        try {
-            zipRecursively(rootDirirectory, zipStrem, "");
-        } finally {
-            zipStrem.close();
+        try (ZipOutputStream zipStream = new ZipOutputStream(zipBuffer)) {
+            zipRecursively(rootDirectory, zipStream, "");
         }
 
         return zipBuffer.toByteArray();
     }
 
     private void writeEntry(final File file, final ZipOutputStream zipStream, final String zipPath) throws IOException {
-        zipStream.putNextEntry(new ZipEntry(zipPath + "/" + file.getName()));
+        zipStream.putNextEntry(new ZipEntry(zipPath + SEPARATOR + file.getName()));
 
         final FileInputStream in = new FileInputStream(file);
         IOUtils.copy(in, zipStream);
@@ -62,22 +60,21 @@ public class Zipper {
         if (parentZipPath.isEmpty()) {
             thisDirZipPath = directory.getName();
         } else {
-            thisDirZipPath = parentZipPath + "/" + directory.getName();
+            thisDirZipPath = parentZipPath + SEPARATOR + directory.getName();
         }
 
         // Create an entry for the directory
-        zipStream.putNextEntry(new ZipEntry(thisDirZipPath + "/"));
+        zipStream.putNextEntry(new ZipEntry(thisDirZipPath + SEPARATOR));
         zipStream.closeEntry();
 
-        final File[] files = directory.listFiles();
-        for (File file : files) {
-            final boolean isDirectoy = file.isDirectory();
-            String zipPath = thisDirZipPath + "/" + file.getName();
-            if (isDirectoy) {
-                zipPath += "/";
+        for (File file : directory.listFiles()) {
+            final boolean isDirectory = file.isDirectory();
+            String zipPath = thisDirZipPath + SEPARATOR + file.getName();
+            if (isDirectory) {
+                zipPath += SEPARATOR;
             }
             if (zippingDecider.shouldZip(zipPath)) {
-                if (isDirectoy) {
+                if (isDirectory) {
                     zipRecursively(file, zipStream, thisDirZipPath);
                 } else {
                     writeEntry(file, zipStream, thisDirZipPath);

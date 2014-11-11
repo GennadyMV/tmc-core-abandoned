@@ -1,5 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,6 +76,6 @@ public class ExerciseKeyTest {
     @Test
     public void toStringReturnCorrectString() {
 
-        assertEquals("course/exercise", ek.toString());
+        assertEquals("course" + File.separatorChar + "exercise", ek.toString());
     }
 }

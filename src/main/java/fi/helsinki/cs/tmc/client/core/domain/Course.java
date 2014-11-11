@@ -142,7 +142,7 @@ public class Course {
     @Override
     public int hashCode() {
 
-        return 31 * 1 + ((name == null) ? 0 : name.hashCode());
+        return 31 + ((name == null) ? 0 : name.hashCode());
     }
 
     @Override

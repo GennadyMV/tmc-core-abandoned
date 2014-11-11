@@ -36,9 +36,6 @@ public class HttpClientFactory {
     private static void maybeSetProxy(final HttpAsyncClientBuilder httpClientBuilder) {
 
         final SystemDefaultRoutePlanner routePlanner = new SystemDefaultRoutePlanner(ProxySelector.getDefault());
-
-        if (routePlanner != null) {
-            httpClientBuilder.setRoutePlanner(routePlanner);
-        }
+        httpClientBuilder.setRoutePlanner(routePlanner);
     }
 }

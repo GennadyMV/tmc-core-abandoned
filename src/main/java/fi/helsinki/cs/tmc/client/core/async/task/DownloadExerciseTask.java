@@ -71,9 +71,7 @@ public class DownloadExerciseTask extends AbstractTask<File> {
 
         final CloseableHttpAsyncClient httpClient = HttpClientFactory.makeHttpClient();
         final ObjectMapper mapper = new ObjectMapper();
-        final HttpWorker worker = new HttpWorker(mapper, httpClient);
-
-        return worker;
+        return new HttpWorker(mapper, httpClient);
     }
 
     private URI buildExerciseDownloadURI() throws TaskFailureException {

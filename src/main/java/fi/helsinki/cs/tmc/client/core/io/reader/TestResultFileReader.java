@@ -31,11 +31,15 @@ public class TestResultFileReader {
 
         final TestCaseList testCaseRecords = mapper.readValue(resultsFile, TestCaseList.class);
 
+        return new TestRunResult(buildTestCaseResultsFrom(testCaseRecords));
+    }
+
+    private List<TestCaseResult> buildTestCaseResultsFrom(final TestCaseList testCaseRecords) {
+
         final List<TestCaseResult> testCaseResults = new ArrayList<>();
         for (final TestCase testCase : testCaseRecords) {
             testCaseResults.add(TestCaseResult.fromTestCaseRecord(testCase));
         }
-
-        return new TestRunResult(testCaseResults);
+        return testCaseResults;
     }
 }

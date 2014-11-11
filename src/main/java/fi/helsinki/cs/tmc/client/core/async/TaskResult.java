@@ -6,7 +6,7 @@ public class TaskResult<S> {
 
     public enum Status {
 
-        SUCCESS, FAILURE, INTERRUPTED;
+        SUCCESS, FAILURE, INTERRUPTED
     }
 
     private final TaskResult.Status resultStatus;

@@ -49,7 +49,7 @@ public abstract class AbstractTask<S> implements Task<S> {
         TaskResult<S> result;
         try {
 
-            result = new TaskResult<S>(TaskResult.Status.SUCCESS, work());
+            result = new TaskResult<>(TaskResult.Status.SUCCESS, work());
 
             listener.onSuccess(result);
 
@@ -57,7 +57,7 @@ public abstract class AbstractTask<S> implements Task<S> {
 
             LOG.info("Backround task " + description + " was interrupted.", exception);
 
-            result = new TaskResult<S>(TaskResult.Status.INTERRUPTED, null);
+            result = new TaskResult<>(TaskResult.Status.INTERRUPTED, null);
 
             cleanUp();
 
@@ -67,7 +67,7 @@ public abstract class AbstractTask<S> implements Task<S> {
 
             LOG.error("Background task" + description + " failed.", exception);
 
-            result = new TaskResult<S>(TaskResult.Status.FAILURE, null, exception);
+            result = new TaskResult<>(TaskResult.Status.FAILURE, null, exception);
 
             cleanUp();
 

@@ -32,21 +32,16 @@ public class TmcProjectFileReader {
             throw new IllegalArgumentException("Provided file is a directory: " + file.getAbsolutePath());
         }
 
-        try {
 
-            final Reader reader = new BufferedReader(new FileReader(file));
-            try {
+        try (Reader reader = new BufferedReader(new FileReader(file))) {
 
-                final Object root = new Yaml().load(reader);
-                final List<String> extraStudentFiles = parse(root);
+            final Object root = new Yaml().load(reader);
+            final List<String> extraStudentFiles = parse(root);
 
-                if (extraStudentFiles != null) {
-                    projectFile.setExtraStudentFiles(extraStudentFiles);
-                }
-
-            } finally {
-                reader.close();
+            if (extraStudentFiles != null) {
+                projectFile.setExtraStudentFiles(extraStudentFiles);
             }
+
         } catch (final IOException exception) {
             LOG.warn("Failed to read " + file.getPath(), exception);
         }
@@ -65,7 +60,7 @@ public class TmcProjectFileReader {
 
         if (files instanceof List) {
 
-            final List<String> extraStudentFiles = new ArrayList<String>();
+            final List<String> extraStudentFiles = new ArrayList<>();
 
             for (final Object value : (List<?>) files) {
 

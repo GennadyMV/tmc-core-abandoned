@@ -17,7 +17,7 @@ public class TestrunnerListener implements TaskListener {
     }
 
     @Override
-    public void onSuccess(final TaskResult<? extends Object> result) {
+    public void onSuccess(final TaskResult<?> result) {
 
         uiInvoker.closeTestsRunningWindow();
 
@@ -33,21 +33,19 @@ public class TestrunnerListener implements TaskListener {
         final List<String> awardedPoints = testRunResult.getAwardedPoints();
         if (awardedPoints.isEmpty()) {
             uiInvoker.invokeNoPointsFromLocalTestsWindow();
-            return;
         } else {
             uiInvoker.invokeSomePointsFromLocalTestsWindow(awardedPoints);
-            return;
         }
     }
 
     @Override
-    public void onFailure(final TaskResult<? extends Object> result) {
+    public void onFailure(final TaskResult<?> result) {
 
         uiInvoker.closeTestsRunningWindow();
     }
 
     @Override
-    public void onInterrupt(final TaskResult<? extends Object> result) {
+    public void onInterrupt(final TaskResult<?> result) {
 
         uiInvoker.closeTestsRunningWindow();
     }

@@ -22,32 +22,32 @@ public class UnzippingResult {
      * Files that were in the zip but did not exist before.
      * In the usual case of downloading a new project, all files go here.
      */
-    private List<String> newFiles = new ArrayList<String>();
+    private List<String> newFiles = new ArrayList<>();
 
     /**
      * Files overwritten as permitted by the given {@code OverwritingDecider}.
      */
-    private List<String> overwrittenFiles = new ArrayList<String>();
+    private List<String> overwrittenFiles = new ArrayList<>();
 
     /**
      * Files skipped because the given {@code OverwritingDecider} didn't allow overwriting.
      */
-    private List<String> skippedFiles = new ArrayList<String>();
+    private List<String> skippedFiles = new ArrayList<>();
 
     /**
      * Files that existed before but were the same in the zip.
      */
-    private List<String> unchangedFiles = new ArrayList<String>();
+    private List<String> unchangedFiles = new ArrayList<>();
 
     /**
      * Files that were deleted because they weren't in the zip.
      */
-    private List<String> deletedFiles = new ArrayList<String>();
+    private List<String> deletedFiles = new ArrayList<>();
 
     /**
      * Files skipped because the given {@code OverwritingDecider} didn't allow deleting.
      */
-    private List<String> skippedDeletingFiles = new ArrayList<String>();
+    private List<String> skippedDeletingFiles = new ArrayList<>();
 
     UnzippingResult(final File projectDirectory) {
 
@@ -127,14 +127,11 @@ public class UnzippingResult {
     @Override
     public String toString() {
 
-        final StringBuilder sb = new StringBuilder();
-        sb.append("New: ").append(newFiles).append('\n');
-        sb.append("Overwritten: ").append(overwrittenFiles).append('\n');
-        sb.append("Skipped: ").append(skippedFiles).append('\n');
-        sb.append("Unchanged: ").append(unchangedFiles).append('\n');
-        sb.append("Deleted: ").append(deletedFiles).append('\n');
-        sb.append("Not deleted: ").append(deletedFiles).append('\n');
-
-        return sb.toString();
+        return "New: " + newFiles + '\n' +
+                "Overwritten: " + overwrittenFiles + '\n' +
+                "Skipped: " + skippedFiles + '\n' +
+                "Unchanged: " + unchangedFiles + '\n' +
+                "Deleted: " + deletedFiles + '\n' +
+                "Not deleted: " + deletedFiles + '\n';
     }
 }

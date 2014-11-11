@@ -25,9 +25,7 @@ public class HttpResponseParser {
 
     public String asString() throws IOException {
 
-        final String content = EntityUtils.toString(response);
-
-        return content;
+        return EntityUtils.toString(response);
     }
 
     public JsonParser json() throws IOException {

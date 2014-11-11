@@ -161,10 +161,7 @@ public class Review {
             return false;
         }
         final Review other = (Review) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
-    }
 
+        return id == other.id;
+    }
 }

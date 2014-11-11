@@ -21,7 +21,7 @@ public class DownloadExerciseTaskListener implements TaskListener {
     }
 
     @Override
-    public void onSuccess(final TaskResult<? extends Object> result) {
+    public void onSuccess(final TaskResult<?> result) {
 
         final File projectRoot = (File) result.result();
 
@@ -29,7 +29,7 @@ public class DownloadExerciseTaskListener implements TaskListener {
     }
 
     @Override
-    public void onFailure(final TaskResult<? extends Object> result) {
+    public void onFailure(final TaskResult<?> result) {
 
         final String error = "Unable to download exercise: \n" +
                              result.exception().getMessage();
@@ -38,5 +38,5 @@ public class DownloadExerciseTaskListener implements TaskListener {
     }
 
     @Override
-    public void onInterrupt(final TaskResult<? extends Object> result) { }
+    public void onInterrupt(final TaskResult<?> result) { }
 }

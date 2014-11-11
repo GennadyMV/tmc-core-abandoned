@@ -30,7 +30,7 @@ public class TestRunResult {
 
     public void setTestCaseResults(final List<TestCaseResult> results) {
 
-        this.testCaseResults = testCaseResults;
+        this.testCaseResults = results;
     }
 
     public ValidationResult getValidationResult() {
@@ -72,12 +72,10 @@ public class TestRunResult {
 
         final Set<String> pointNames = new HashSet<>();
         for (final TestCaseResult result : testCaseResults) {
-            for (String pointName : result.getPointNames()) {
-                pointNames.add(pointName);
-            }
+            Collections.addAll(pointNames, result.getPointNames());
         }
 
-        return new ArrayList<String>(pointNames);
+        return new ArrayList<>(pointNames);
     }
 
     public boolean allTestsPassed() {

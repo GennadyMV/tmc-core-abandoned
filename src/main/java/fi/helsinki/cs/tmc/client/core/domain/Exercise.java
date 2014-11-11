@@ -290,11 +290,8 @@ public class Exercise implements Serializable {
             throw new IllegalArgumentException("Unable to compare against a null time");
         }
 
-        if (deadline == null) {
-            return false;
-        }
+        return deadline != null && deadline.before(time);
 
-        return deadline.before(time);
     }
 
     private void assertNotNullOrEmpty(final String string, final String argumentName) {

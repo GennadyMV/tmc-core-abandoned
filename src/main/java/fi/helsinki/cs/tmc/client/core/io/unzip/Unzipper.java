@@ -45,7 +45,7 @@ public class Unzipper {
     public UnzippingResult unzipProject(final byte[] data, final File projectDirectory, final boolean reallyWriteFiles) throws IOException {
 
         final UnzippingResult result = new UnzippingResult(projectDirectory);
-        final Set<String> pathsInZip = new HashSet<String>();
+        final Set<String> pathsInZip = new HashSet<>();
 
         final String projectDirectoryInZip = findProjectDirectoryInZip(data);
         if (projectDirectoryInZip == null) {

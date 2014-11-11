@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -45,7 +46,6 @@ public final class ExerciseKey {
 
     @Override
     public String toString() {
-
-        return courseName + "/" + exerciseName;
+        return new File(courseName + "/" + exerciseName).toString();
     }
 }
