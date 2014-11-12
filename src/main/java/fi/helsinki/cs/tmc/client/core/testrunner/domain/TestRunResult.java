@@ -3,6 +3,7 @@ package fi.helsinki.cs.tmc.client.core.testrunner.domain;
 import fi.helsinki.cs.tmc.stylerunner.validation.ValidationResult;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -87,5 +88,23 @@ public class TestRunResult {
         }
 
         return true;
+    }
+
+    public boolean isSubmittable() {
+
+        if (!allTestsPassed()) {
+            return false;
+        }
+
+        if (validationResult == null || validationResult.getValidationErrors().isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean gotPartialPoints() {
+
+        return !getAwardedPoints().isEmpty();
     }
 }

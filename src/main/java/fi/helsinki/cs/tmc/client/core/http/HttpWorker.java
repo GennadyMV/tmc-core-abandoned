@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import fi.helsinki.cs.tmc.client.core.domain.Settings;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
@@ -93,6 +95,16 @@ public class HttpWorker {
     public HttpWorker withCredentials(final Settings settings) {
 
         this.credentials = new UsernamePasswordCredentials(settings.getUsername(), settings.getPassword());
+
+        return this;
+    }
+
+    public HttpWorker withParam(final String key, final String value) throws URISyntaxException {
+
+        final URIBuilder builder = new URIBuilder(uri);
+        builder.addParameter(key, value);
+
+        this.uri = builder.build();
 
         return this;
     }

@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
 import java.util.Collections;
 import java.util.List;
@@ -133,5 +134,10 @@ public class SubmissionResult {
             }
         }
         return true;
+    }
+
+    public TestRunResult asTestRunResult() {
+
+        return new TestRunResult(testCases);
     }
 }

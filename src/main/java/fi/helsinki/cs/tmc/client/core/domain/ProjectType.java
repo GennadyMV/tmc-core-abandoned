@@ -1,5 +1,12 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import fi.helsinki.cs.tmc.client.core.io.unzip.decider.NeverOverwritingDecider;
+import fi.helsinki.cs.tmc.client.core.io.unzip.decider.OverwritingDecider;
+import fi.helsinki.cs.tmc.client.core.io.zip.decider.DefaultZippingDecider;
+import fi.helsinki.cs.tmc.client.core.io.zip.decider.MavenZippingDecider;
+import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZipEverythingDecider;
+import fi.helsinki.cs.tmc.client.core.io.zip.decider.ZippingDecider;
+
 import java.util.List;
 
 /**
@@ -7,16 +14,33 @@ import java.util.List;
  */
 public enum ProjectType {
 
-    JAVA_ANT("build.xml"),
-    JAVA_MAVEN("pom.xml"),
-    MAKEFILE("Makefile"),
-    NONE("\0");
+    JAVA_ANT("build.xml",
+              DefaultZippingDecider.class,
+              NeverOverwritingDecider.class),
 
+    JAVA_MAVEN("pom.xml",
+                MavenZippingDecider.class,
+                NeverOverwritingDecider.class),
+
+    MAKEFILE("Makefile",
+              DefaultZippingDecider.class,
+              NeverOverwritingDecider.class),
+
+    NONE("\0",
+          ZipEverythingDecider.class,
+          NeverOverwritingDecider.class);
+
+    private final Class<? extends ZippingDecider> zippingDecider;
+    private final Class<? extends OverwritingDecider> overwritingDecider;
     private final String buildFile;
 
-    private ProjectType(final String buildFile) {
+    private ProjectType(final String buildFile,
+                         final Class<? extends ZippingDecider> zippingDecider,
+                         final Class<? extends OverwritingDecider> overwritingDecider) {
 
         this.buildFile = buildFile;
+        this.zippingDecider = zippingDecider;
+        this.overwritingDecider = overwritingDecider;
     }
 
     public String getBuildFile() {
@@ -46,4 +70,13 @@ public enum ProjectType {
         return NONE;
     }
 
+    public ZippingDecider getZippingDecider() throws InstantiationException, IllegalAccessException {
+
+        return zippingDecider.newInstance();
+    }
+
+    public OverwritingDecider getOverwritingDecider() throws InstantiationException, IllegalAccessException {
+
+        return overwritingDecider.newInstance();
+    }
 }

@@ -66,7 +66,7 @@ public class TestrunnerListenerTest {
 
         taskResult = new TaskResult<>(buildTestRunResult(true, true));
         listener.onSuccess(taskResult);
-        verify(invoker).invokeTestResultWindow(any(List.class));
+        verify(invoker).invokeTestResultWindow(any(TestRunResult.class));
     }
 
     @Test
@@ -92,6 +92,6 @@ public class TestrunnerListenerTest {
         taskResult.result().getTestCaseResults().add(new TestCaseResult("another", new String[]{"another"}, false, "failed"));
         listener.onSuccess(taskResult);
 
-        verify(invoker).invokeSomePointsFromLocalTestsWindow(any(List.class));
+        verify(invoker).invokeSomePointsFromLocalTestsWindow(any(TestRunResult.class));
     }
 }

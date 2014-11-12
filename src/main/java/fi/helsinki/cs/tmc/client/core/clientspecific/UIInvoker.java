@@ -1,9 +1,8 @@
 package fi.helsinki.cs.tmc.client.core.clientspecific;
 
-import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
+import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
 import java.io.File;
-import java.util.List;
 
 public interface UIInvoker {
 
@@ -13,15 +12,22 @@ public interface UIInvoker {
 
 
     /* Testrunner */
-    void invokeTestResultWindow(List<TestCaseResult> testCaseResults);
+    void invokeTestResultWindow(TestRunResult testRunResult);
     void invokeTestsRunningWindow();
     void closeTestsRunningWindow();
     void invokeSubmitToServerWindow();
-    void invokeSomePointsFromLocalTestsWindow(List<String> awardedPoints);
+    void invokeSomePointsFromLocalTestsWindow(TestRunResult testRunResult);
     void invokeNoPointsFromLocalTestsWindow();
 
+
+    /*  */
+    void invokeSubmittingExerciseWindow();
+    void closeSubmittingExerciseWindow();
+    void invokeAllTestsPassedOnServerWindow();
+    void invokeSomeTestsFailedOnServerWindow();
 
     /* IDE Interactions */
     void userVisibleException(String string);
     boolean openProject(File projectRoot);
+
 }
