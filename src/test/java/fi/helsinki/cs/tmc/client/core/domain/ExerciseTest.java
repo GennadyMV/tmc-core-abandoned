@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class ExerciseTest {
 
-    Exercise exercise;
+    private Exercise exercise;
 
     @Before
     public void setUp() {
