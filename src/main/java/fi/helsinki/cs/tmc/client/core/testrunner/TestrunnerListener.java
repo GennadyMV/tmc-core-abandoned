@@ -5,8 +5,6 @@ import fi.helsinki.cs.tmc.client.core.async.TaskResult;
 import fi.helsinki.cs.tmc.client.core.clientspecific.UIInvoker;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
-import java.util.List;
-
 public class TestrunnerListener implements TaskListener {
 
     private final UIInvoker uiInvoker;
@@ -23,18 +21,14 @@ public class TestrunnerListener implements TaskListener {
 
         final TestRunResult testRunResult = (TestRunResult) result.result();
 
-        uiInvoker.invokeTestResultWindow(testRunResult.getTestCaseResults());
+        uiInvoker.invokeTestResultWindow(testRunResult);
 
-        if (testRunResult.allTestsPassed()) {
+        if (testRunResult.isSubmittable()) {
             uiInvoker.invokeSubmitToServerWindow();
-            return;
-        }
-
-        final List<String> awardedPoints = testRunResult.getAwardedPoints();
-        if (awardedPoints.isEmpty()) {
-            uiInvoker.invokeNoPointsFromLocalTestsWindow();
+        } else if (testRunResult.gotPartialPoints()) {
+            uiInvoker.invokeSomePointsFromLocalTestsWindow(testRunResult);
         } else {
-            uiInvoker.invokeSomePointsFromLocalTestsWindow(awardedPoints);
+            uiInvoker.invokeNoPointsFromLocalTestsWindow();
         }
     }
 
