@@ -36,7 +36,7 @@ public class CancellableHttpRequest {
 
         client.start();
 
-        LOG.info("Making HTTP request to " + request.getURI().toString());
+        LOG.info("Making " + request.getMethod() + " request to " + request.getURI().toString());
 
         if (this.credentials != null) {
             request.addHeader(new BasicScheme(Charset.forName("UTF-8")).authenticate(this.credentials, request, null));

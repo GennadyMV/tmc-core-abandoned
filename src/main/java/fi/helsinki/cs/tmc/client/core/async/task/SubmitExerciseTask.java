@@ -87,18 +87,17 @@ public class SubmitExerciseTask extends AbstractTask<SubmissionResult> {
 
     private HttpWorker buildHttpWorker() {
 
-        final CloseableHttpAsyncClient httpClient = HttpClientFactory.makeHttpClient();
         final ObjectMapper mapper = new ObjectMapper();
-        return new HttpWorker(mapper, httpClient);
+        return new HttpWorker(mapper);
     }
 
     private SubmissionResponse submitToServer(final HttpWorker http, final byte[] zip) throws TaskFailureException {
 
         final URI submissionURI;
         try {
-            submissionURI = new URI(exercise.getSubmissionsUrl());
+            submissionURI = new URI(exercise.getReturnUrl());
         } catch (URISyntaxException exception) {
-            throw new TaskFailureException("Invalid submission URI: " + exercise.getSubmissionsUrl(), exception);
+            throw new TaskFailureException("Invalid submission URI: " + exercise.getReturnUrl(), exception);
         }
 
         try {
@@ -120,7 +119,6 @@ public class SubmitExerciseTask extends AbstractTask<SubmissionResult> {
             } catch (IOException exception) {
                 throw new TaskFailureException("Server communication failure", exception);
             }
-            
         } while (result.getStatus() == SubmissionResult.Status.PROCESSING);
 
         return result;

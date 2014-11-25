@@ -4,14 +4,8 @@ import java.net.URI;
 
 public class SubmissionResponse {
 
-    private final URI submissionUrl;
-    private final URI pasteUrl;
-
-    public SubmissionResponse(final URI submissionUrl, final URI pasteUrl) {
-
-        this.submissionUrl = submissionUrl;
-        this.pasteUrl = pasteUrl;
-    }
+    private URI submissionUrl;
+    private URI pasteUrl;
 
     public URI getSubmissionUrl() {
 
@@ -21,5 +15,13 @@ public class SubmissionResponse {
     public URI getPasteUrl() {
 
         return pasteUrl;
+    }
+
+    public void setSubmissionUrl(URI submissionUrl) {
+        this.submissionUrl = submissionUrl;
+    }
+
+    public void setPasteUrl(URI pasteUrl) {
+        this.pasteUrl = pasteUrl;
     }
 }

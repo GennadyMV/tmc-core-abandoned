@@ -31,7 +31,6 @@ public class HttpResponseParser {
     public JsonParser json() throws IOException {
 
         final String json = EntityUtils.toString(response);
-
         return new JsonParser(mapper, json);
     }
 }

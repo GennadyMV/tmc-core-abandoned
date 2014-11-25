@@ -1,6 +1,7 @@
 package fi.helsinki.cs.tmc.client.core.http;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
@@ -16,29 +17,27 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 public class HttpWorker {
 
     private URI uri;
     private Credentials credentials;
     private ObjectMapper mapper;
-    private CloseableHttpAsyncClient client;
 
-    public HttpWorker(final ObjectMapper mapper, final CloseableHttpAsyncClient client) {
+    public HttpWorker(final ObjectMapper mapper) {
 
         this.mapper = mapper;
-        this.client = client;
 
         //TODO: Consider settings this globally somewhere else
         mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy());
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public HttpExecutor get() {
 
         final HttpGet request = new HttpGet(uri);
 
-        return new HttpExecutor(mapper, new CancellableHttpRequest(client, request, credentials));
+        return new HttpExecutor(mapper, new CancellableHttpRequest(HttpClientFactory.makeHttpClient(), request, credentials));
     }
 
     public HttpExecutor post(final byte[] content) {
@@ -48,7 +47,7 @@ public class HttpWorker {
         final HttpPost postRequest = new HttpPost(uri);
         postRequest.setEntity(entity);
 
-        return new HttpExecutor(mapper, new CancellableHttpRequest(client, postRequest, credentials));
+        return new HttpExecutor(mapper, new CancellableHttpRequest(HttpClientFactory.makeHttpClient(), postRequest, credentials));
 
     }
 

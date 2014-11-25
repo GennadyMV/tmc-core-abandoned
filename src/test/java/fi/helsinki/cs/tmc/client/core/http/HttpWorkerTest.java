@@ -44,7 +44,7 @@ public class HttpWorkerTest {
 
         WireMock.reset();
 
-        http = new HttpWorker(new ObjectMapper(), HttpClientFactory.makeHttpClient());
+        http = new HttpWorker(new ObjectMapper());
         rootURI = new URI("http://localhost:8089/hy");
 
         stubFor(get(urlMatching(ANY_URL))

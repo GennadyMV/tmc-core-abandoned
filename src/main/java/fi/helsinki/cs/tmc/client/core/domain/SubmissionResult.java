@@ -1,5 +1,6 @@
 package fi.helsinki.cs.tmc.client.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestCaseResult;
 import fi.helsinki.cs.tmc.client.core.testrunner.domain.TestRunResult;
 
@@ -14,7 +15,13 @@ import java.util.List;
 public class SubmissionResult {
 
     public static enum Status {
-        OK, FAIL, ERROR, PROCESSING
+
+        OK, FAIL, ERROR, PROCESSING;
+
+        @JsonCreator
+        public static Status fromJson(String text) {
+            return valueOf(text.toUpperCase());
+        }
     }
 
     private Status status;
