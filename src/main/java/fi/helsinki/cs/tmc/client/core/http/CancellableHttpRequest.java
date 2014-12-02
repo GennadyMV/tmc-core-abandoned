@@ -43,20 +43,16 @@ public class CancellableHttpRequest {
         }
 
         final Future<HttpResponse> futureResponse = client.execute(request, null);
+        HttpResponse response;
+        try {
+            response = futureResponse.get();
+        } catch (InterruptedException exception) {
+            LOG.info("HTTP Request to " + request.getURI().toString() + " was cancelled, closing client");
+            futureResponse.cancel(true);
+            client.close();
 
-        while (!futureResponse.isDone()) {
-            try {
-                Thread.sleep(SLEEP_STEP);
-            } catch (InterruptedException exception) {
-                LOG.info("HTTP Request to " + request.getURI().toString() + " was cancelled, closing client");
-                futureResponse.cancel(true);
-                client.close();
-
-                throw exception;
-            }
+            throw exception;
         }
-
-        final HttpResponse response = futureResponse.get();
 
         client.close();
 

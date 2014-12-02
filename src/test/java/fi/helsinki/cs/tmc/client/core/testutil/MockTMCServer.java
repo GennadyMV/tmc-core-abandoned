@@ -63,7 +63,7 @@ public class MockTMCServer {
                             .withHeader(CONTENT_TYPE, APP_ZIP)));
     }
 
-    public void stubPostWithJsonResponse(final int priority, final String url, final String response) {
+    public void stubZipPostWithJsonResponse(final int priority, final String url, final String response) {
         stubFor(post(urlMatching(url + MAYBE_PARAM))
                 .withHeader(BASIC_AUTH_HEADER_KEY, matching(BASIC_AUTH_HEADER_VALUE))
                 .atPriority(priority)
@@ -76,7 +76,7 @@ public class MockTMCServer {
 
         stubGetWithJsonResponse(Integer.MAX_VALUE, COURSES_JSON_URL, COURSES_JSON_CONTENT);
         stubGetWithZipResponse(Integer.MAX_VALUE, EXERCISE_ZIP_URL, EXERCISE_ZIP_CONTENT);
-        stubPostWithJsonResponse(Integer.MAX_VALUE, EXERCISE_RETURN_URL, EXERCISE_RETURN_CONTENT);
+        stubZipPostWithJsonResponse(Integer.MAX_VALUE, EXERCISE_RETURN_URL, EXERCISE_RETURN_CONTENT);
         stubGetWithJsonResponse(Integer.MAX_VALUE, EXERCISE_SUBMISSION_URL, EXERCISE_SUBMISSION_PROCESSING_CONTENT);
     }
 }

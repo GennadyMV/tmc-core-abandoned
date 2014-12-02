@@ -20,33 +20,33 @@ import static org.junit.Assert.*;
 
 public class ZipperTest {
 
-    private static final String SLASH = File.separator;
+    private static final String DS = File.separator;
 
     @Rule
     public TemporaryFolder temporaryDirectory = new TemporaryFolder();
 
-    private String mainDirectory;
+    private String rootDirectory;
 
     @Before
     public void setUp() throws IOException {
 
-        mainDirectory = temporaryDirectory.getRoot().getAbsolutePath() + SLASH + "MyExercise";
-        new File(mainDirectory + SLASH + "src" + SLASH + "subdir").mkdirs();
-        new File(mainDirectory + SLASH + "src" + SLASH + "Included1.txt").createNewFile();
-        new File(mainDirectory + SLASH + "src" + SLASH + "subdir" + SLASH + "Included2.txt").createNewFile();
+        rootDirectory = temporaryDirectory.getRoot().getAbsolutePath() + DS + "MyExercise";
+        new File(rootDirectory + DS + "src" + DS + "subdir").mkdirs();
+        new File(rootDirectory + DS + "src" + DS + "Included1.txt").createNewFile();
+        new File(rootDirectory + DS + "src" + DS + "subdir" + DS + "Included2.txt").createNewFile();
 
-        new File(mainDirectory + SLASH + "Excluded.txt").createNewFile();
-        new File(mainDirectory + SLASH + "test").mkdir();
-        new File(mainDirectory + SLASH + "test" + SLASH + "Excluded.txt").createNewFile();
-        new File(mainDirectory + SLASH + "test").mkdir();
-        new File(mainDirectory + SLASH + "excluded").mkdir();
-        new File(mainDirectory + SLASH + "excluded" + SLASH + "Foo.txt").createNewFile();
+        new File(rootDirectory + DS + "Excluded.txt").createNewFile();
+        new File(rootDirectory + DS + "test").mkdir();
+        new File(rootDirectory + DS + "test" + DS + "Excluded.txt").createNewFile();
+        new File(rootDirectory + DS + "test").mkdir();
+        new File(rootDirectory + DS + "excluded").mkdir();
+        new File(rootDirectory + DS + "excluded" + DS + "Foo.txt").createNewFile();
     }
 
     @Test(expected = IOException.class)
     public void failsOnNonexistantRootDirectory() throws IOException {
 
-        final Zipper zipper = new Zipper(new File(mainDirectory + SLASH + "noSuchFolder"), new ZipEverythingDecider());
+        final Zipper zipper = new Zipper(new File(rootDirectory + DS + "noSuchFolder"), new ZipEverythingDecider());
         zipper.zipProjectSources();
     }
 
@@ -92,7 +92,7 @@ public class ZipperTest {
 
     private List<String> getZipEntries(final ZippingDecider decider) throws IOException {
 
-        final Zipper zipper = new Zipper(new File(mainDirectory), decider);
+        final Zipper zipper = new Zipper(new File(rootDirectory), decider);
         final byte[] zipData = zipper.zipProjectSources();
 
         return zipEntryNames(zipData);
